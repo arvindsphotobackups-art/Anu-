@@ -7,7 +7,7 @@ export default function ChapterNav({ current, unlocked, onNavigate }) {
     const [open, setOpen] = useState(false);
 
     return (
-        <div className="fixed bottom-6 right-6 z-[70]">
+        <div className="fixed bottom-6 right-6 z-[70] max-md:bottom-auto max-md:right-auto max-md:left-5 max-md:top-5">
             <AnimatePresence>
                 {open && (
                     <motion.div
@@ -15,7 +15,7 @@ export default function ChapterNav({ current, unlocked, onNavigate }) {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 14 }}
                         transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                        className="absolute bottom-14 right-0 w-60 rounded-md border border-[#d4af37]/15 bg-[#0e0e11]/95 p-2 shadow-[0_20px_60px_rgba(0,0,0,0.7)] backdrop-blur-md"
+                        className="absolute bottom-14 right-0 w-60 rounded-md border border-[#d4af37]/15 bg-[#0e0e11]/95 p-2 shadow-[0_20px_60px_rgba(0,0,0,0.7)] backdrop-blur-md max-md:bottom-auto max-md:left-0 max-md:right-auto max-md:top-14"
                         data-testid="chapter-nav-panel"
                     >
                         <p className="f-ui px-3 pb-2 pt-2 text-[10px] uppercase tracking-[0.3em] text-[#a1a1a6]">

@@ -33,11 +33,15 @@ export default function LittleWorld({ onVisit, onNext }) {
     const [lampNote, setLampNote] = useState(false);
     const [found, setFound] = useState([]);
     const [finalStage, setFinalStage] = useState(0);
+    const [activeId, setActiveId] = useState(null);
     const timers = useRef([]);
 
     const later = (fn, ms) => {
         timers.current.push(setTimeout(fn, ms));
     };
+
+    const play = (id) => ({ animationPlayState: activeId === id ? "paused" : "running" });
+    const release = (id) => setActiveId((cur) => (cur === id ? null : cur));
 
     useEffect(() => {
         onVisit();
@@ -61,13 +65,18 @@ export default function LittleWorld({ onVisit, onNext }) {
 
     const hug = () => {
         discover("teddy");
+        setActiveId("teddy");
         setHugged(true);
-        later(() => setHugged(false), 7000);
+        later(() => {
+            setHugged(false);
+            release("teddy");
+        }, 7000);
     };
 
     const tapPhone = () => {
         discover("phone");
         if (phoneStage >= 0) return;
+        setActiveId("phone");
         setPhoneLit(true);
         setPhoneStage(0);
         later(() => setPhoneStage(1), 1700);
@@ -76,27 +85,40 @@ export default function LittleWorld({ onVisit, onNext }) {
         later(() => {
             setPhoneStage(-1);
             setPhoneLit(false);
+            release("phone");
         }, 11500);
     };
 
     const tapClock = () => {
         discover("clock");
         if (clockPhase !== "idle") return;
+        setActiveId("clock");
         setClockPhase("spin");
         later(() => setClockPhase("settled"), 1800);
-        later(() => setClockPhase("idle"), 9500);
+        later(() => {
+            setClockPhase("idle");
+            release("clock");
+        }, 9500);
     };
 
     const tapWindow = () => {
         discover("window");
+        setActiveId("window");
         setWindowNote(true);
-        later(() => setWindowNote(false), 6000);
+        later(() => {
+            setWindowNote(false);
+            release("window");
+        }, 6000);
     };
 
     const tapLamp = () => {
         discover("lamp");
+        setActiveId("lamp");
         setLampNote(true);
-        later(() => setLampNote(false), 6000);
+        later(() => {
+            setLampNote(false);
+            release("lamp");
+        }, 6000);
     };
 
     const handStyle = (idleAnim, settleDeg) =>
@@ -104,7 +126,7 @@ export default function LittleWorld({ onVisit, onNext }) {
             ? { animation: "spin 0.7s linear infinite" }
             : clockPhase === "settled"
               ? { transform: `translateX(-50%) rotate(${settleDeg}deg)`, transition: "transform 1.2s ease" }
-              : { animation: idleAnim };
+              : { animation: idleAnim, ...play("clock") };
 
     const phoneIdle = phoneStage === -1 && !phoneLit;
 
@@ -161,7 +183,13 @@ export default function LittleWorld({ onVisit, onNext }) {
                             opacity: 0.85,
                             boxShadow: "0 0 40px 12px rgba(245,242,235,0.18)",
                             animation: "moonbeam 14s ease-in-out infinite",
+                            ...play("window"),
                         }}
+                    />
+                    {/* slow cloud crossing the moon */}
+                    <div
+                        className="anim-cloud absolute top-[16%] h-7 w-24 rounded-full bg-[#0b101e]/80 blur-[3px]"
+                        style={play("window")}
                     />
                     {[...Array(9)].map((_, i) => (
                         <span
@@ -171,6 +199,7 @@ export default function LittleWorld({ onVisit, onNext }) {
                                 left: `${10 + ((i * 37) % 80)}%`,
                                 top: `${8 + ((i * 23) % 50)}%`,
                                 animationDelay: `${i * 0.7}s`,
+                                ...play("window"),
                             }}
                         />
                     ))}
@@ -181,6 +210,7 @@ export default function LittleWorld({ onVisit, onNext }) {
                             background:
                                 "linear-gradient(115deg, rgba(245,242,235,0.10) 0%, rgba(245,242,235,0) 55%)",
                             animation: "moonbeam 12s ease-in-out infinite",
+                            ...play("window"),
                         }}
                     />
                     {/* curtains */}
@@ -189,6 +219,7 @@ export default function LittleWorld({ onVisit, onNext }) {
                         style={{
                             background: "linear-gradient(90deg, #151222 0%, #1c1830 60%, rgba(28,24,48,0.2) 100%)",
                             animationDuration: "9s",
+                            ...play("window"),
                         }}
                     />
                     <div
@@ -197,6 +228,7 @@ export default function LittleWorld({ onVisit, onNext }) {
                             background: "linear-gradient(270deg, #151222 0%, #1c1830 60%, rgba(28,24,48,0.2) 100%)",
                             animationDuration: "10.5s",
                             animationDelay: "1.2s",
+                            ...play("window"),
                         }}
                     />
                 </div>
@@ -252,7 +284,10 @@ export default function LittleWorld({ onVisit, onNext }) {
                     />
                     <span className="absolute left-1/2 top-1/2 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#f5f2eb]" />
                 </div>
-                <p className="f-hand mt-2 text-lg text-[#a1a1a6]" data-testid="clock-caption">
+                <div className="anim-sway relative -mt-1 h-7 w-[2px] bg-[#f5f2eb]/20" style={{ animationDuration: "2.2s", ...play("clock") }}>
+                    <span className="absolute bottom-0 left-1/2 h-2 w-2 -translate-x-1/2 rounded-full bg-[#d4af37]/50" />
+                </div>
+                <p className="f-hand mt-1 text-lg text-[#a1a1a6]" data-testid="clock-caption">
                     {clockPhase === "idle" ? "somewhere past 1am" : "somewhere past 1am, again."}
                 </p>
                 <AnimatePresence>
@@ -282,8 +317,34 @@ export default function LittleWorld({ onVisit, onNext }) {
                         background:
                             "radial-gradient(circle, rgba(212,175,55,0.16) 0%, rgba(212,175,55,0.05) 45%, rgba(3,3,5,0) 70%)",
                         animation: "breathe 6s ease-in-out infinite, lampHum 11s linear infinite",
+                        ...play("lamp"),
                     }}
                 />
+                {/* warm pool of light on the desk */}
+                <div
+                    className="anim-breathe absolute bottom-[16%] left-[14%] h-10 w-52 rounded-[50%]"
+                    style={{
+                        background: "radial-gradient(ellipse, rgba(212,175,55,0.15) 0%, rgba(212,175,55,0) 70%)",
+                        animationDuration: "5s",
+                        ...play("lamp"),
+                    }}
+                />
+                {/* tiny sparks rising through the light */}
+                {[...Array(3)].map((_, i) => (
+                    <span
+                        key={i}
+                        className="anim-mote absolute rounded-full bg-[#d4af37]"
+                        style={{
+                            left: `${34 + i * 8}%`,
+                            bottom: "34%",
+                            width: 2,
+                            height: 2,
+                            animationDelay: `${i * 1.4}s`,
+                            animationDuration: "5s",
+                            ...play("lamp"),
+                        }}
+                    />
+                ))}
                 <button
                     data-testid="world-lamp"
                     onClick={tapLamp}
@@ -329,6 +390,7 @@ export default function LittleWorld({ onVisit, onNext }) {
                         style={{
                             opacity: phoneIdle ? undefined : 0.95,
                             animation: phoneIdle ? "screenGlow 11s linear infinite" : "none",
+                            ...play("phone"),
                         }}
                     />
                     <span
@@ -336,6 +398,7 @@ export default function LittleWorld({ onVisit, onNext }) {
                         style={{
                             opacity: phoneIdle ? undefined : 1,
                             animation: phoneIdle ? "reelGlow 11s linear infinite" : "none",
+                            ...play("phone"),
                         }}
                     >
                         <span className="f-ui text-[8px] font-medium tracking-wide text-[#f5f2eb]">anushika</span>
@@ -402,7 +465,7 @@ export default function LittleWorld({ onVisit, onNext }) {
             <div className="absolute bottom-[6%] left-[10%]" data-testid="world-teddy">
                 <button onClick={hug} aria-label="teddy bear" className="relative block" data-testid="world-teddy-button">
                     {found.includes("teddy") && <FoundMark className="-right-6 -top-3" />}
-                    <svg viewBox="0 0 120 130" className={`anim-breathe-scale w-28 transition-transform duration-700 ${hugged ? "scale-95" : ""}`}>
+                    <svg viewBox="0 0 120 130" className={`anim-breathe-scale w-28 transition-transform duration-700 ${hugged ? "scale-95" : ""}`} style={play("teddy")}>
                         <ellipse cx="60" cy="88" rx="30" ry="34" fill="#2e2620" />
                         <ellipse cx="60" cy="92" rx="17" ry="22" fill="#3a3028" />
                         <circle cx="40" cy="26" r="10" fill="#2e2620" />
@@ -414,16 +477,16 @@ export default function LittleWorld({ onVisit, onNext }) {
                         <circle cx="51" cy="40" r="2.4" fill="#0a0a0c" />
                         <circle cx="69" cy="40" r="2.4" fill="#0a0a0c" />
                         <ellipse cx="60" cy="50" rx="3" ry="2.2" fill="#0a0a0c" />
-                        <g style={{ transformBox: "fill-box", transformOrigin: "right center", animation: hugged ? "none" : "armAskL 9s ease-in-out infinite" }}>
+                        <g style={{ transformBox: "fill-box", transformOrigin: "right center", animation: "armAskL 9s ease-in-out infinite", ...play("teddy") }}>
                             <ellipse cx="30" cy="82" rx="9" ry="18" fill="#2e2620" transform="rotate(20 30 82)" />
                         </g>
-                        <g style={{ transformBox: "fill-box", transformOrigin: "left center", animation: hugged ? "none" : "armAskR 9s ease-in-out infinite" }}>
+                        <g style={{ transformBox: "fill-box", transformOrigin: "left center", animation: "armAskR 9s ease-in-out infinite", ...play("teddy") }}>
                             <ellipse cx="90" cy="82" rx="9" ry="18" fill="#2e2620" transform="rotate(-20 90 82)" />
                         </g>
                     </svg>
                     <span
                         className="f-hand pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 rounded-full border border-[#f5f2eb]/15 bg-[#121214] px-3 py-1 text-base text-[#f5f2eb]"
-                        style={{ animation: hugged ? "none" : "bubbleAsk 9s ease-in-out infinite", opacity: hugged ? 0 : undefined }}
+                        style={{ animation: "bubbleAsk 9s ease-in-out infinite", opacity: hugged ? 0 : undefined, ...play("teddy") }}
                         data-testid="teddy-hug-bubble"
                     >
                         hug?

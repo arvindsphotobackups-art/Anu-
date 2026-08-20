@@ -239,6 +239,23 @@ body {
 .anim-ring { animation: ringPulse 1.2s ease-out infinite; }
 .anim-float-heart { animation: floatHeart 3.4s ease-in-out infinite; }
 
+@keyframes shoot {
+    0% { transform: translate(0, 0) rotate(155deg); opacity: 0; }
+    2% { opacity: 0.85; }
+    9% { transform: translate(-32vw, 13vh) rotate(155deg); opacity: 0; }
+    100% { transform: translate(-32vw, 13vh) rotate(155deg); opacity: 0; }
+}
+
+@keyframes cloudDrift {
+    0% { left: -30%; opacity: 0; }
+    12% { opacity: 0.75; }
+    88% { opacity: 0.75; }
+    100% { left: 110%; opacity: 0; }
+}
+
+.anim-shoot { animation: shoot 16s linear infinite; }
+.anim-cloud { animation: cloudDrift 26s linear infinite; }
+
 @media (prefers-reduced-motion: reduce) {
     .anim-twinkle, .anim-heartbeat, .anim-breathe, .anim-sway,
     .anim-flicker, .grain, .eq-bar, .fragment-float, .anim-breathe-scale, .anim-mote {

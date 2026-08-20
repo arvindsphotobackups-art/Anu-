@@ -103,6 +103,43 @@ export default function Landing({ onEnter }) {
                         }}
                     />
                 ))}
+                {/* moon */}
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 2.6, duration: 2.5, ease: [0.22, 1, 0.36, 1] }}
+                    className="absolute right-[16%] top-[6%]"
+                    data-testid="landing-moon"
+                >
+                    <div
+                        className="anim-breathe absolute -inset-10 rounded-full"
+                        style={{
+                            background: "radial-gradient(circle, rgba(245,242,235,0.13) 0%, rgba(245,242,235,0) 70%)",
+                            animationDuration: "9s",
+                        }}
+                    />
+                    <div className="relative h-16 w-16 md:h-20 md:w-20">
+                        <div
+                            className="absolute inset-0 rounded-full"
+                            style={{
+                                background: "radial-gradient(circle at 38% 34%, #fdfbf7 0%, #efe9dc 55%, #d8d2c2 100%)",
+                                boxShadow: "0 0 50px 12px rgba(245,242,235,0.16)",
+                            }}
+                        />
+                        <div
+                            className="absolute inset-0 rounded-full bg-[#080c17]"
+                            style={{ transform: "translate(26%, -5%) scale(0.9)" }}
+                        />
+                    </div>
+                </motion.div>
+                {/* occasional shooting star */}
+                <span
+                    className="anim-shoot absolute right-[18%] top-[12%] block h-[1.5px] w-16 rounded-full"
+                    style={{
+                        background: "linear-gradient(90deg, rgba(253,251,247,0) 0%, rgba(253,251,247,0.9) 100%)",
+                        animationDelay: "7s",
+                    }}
+                />
             </div>
 
             {/* hidden special stars */}

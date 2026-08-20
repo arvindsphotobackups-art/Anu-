@@ -15,6 +15,12 @@ Build a FRONTEND-ONLY interactive romantic story website (personal gift). No bac
 - The gift recipient (her): explores chapters sequentially, discovers hidden interactions.
 - The creator (him): edits texts in `src/data/*` and swaps placeholder images.
 
+## Implemented (2026-08-21, iteration 8 — mobile fixes, moon, sound doodles, living lamp)
+- Fixed mobile overlap: chapter-nav toggle collided with the comic's next button on phones (menu now docks top-left on mobile). Fine-tuned comic scenes for small screens (chat cards widened, characters/cars resized, call and Wonderla layouts rebalanced).
+- Comic sound doodles: "trrr… trrr…" (ring), "dhak dhak dhak" (rides with the coaster car), "krrk!!" (phone crack), "grrr…" (jealousy), "tuk… tuk…" (her library heartbeat), "muah~" (hand kiss).
+- Landing: crescent moon with breathing halo + occasional shooting star.
+- Little World: lamp gained a breathing light pool and rising sparks; clock gained a swinging pendulum; window gained a drifting cloud; every object's idle animation now PAUSES while its message is open and resumes when it closes or another object is tapped (verified via computed animationPlayState).
+
 ## Implemented (2026-08-21, iteration 7 — environmental comic + more landing stars)
 - Landing: 9 hidden stars total, including "i love u kuttu 😗", "en asa kothamalliye 😙", "eyyy kuttachi", "en thangamiluuu".
 - Comic rebuilt as an animated graphic-novel scrapbook (style unchanged): 10 story scenes with real environments — library (shelves, two tables, friends, she walks over, sequential bubbles), first message (night bedroom, chat card, sweat drop), first call (split bedrooms, ringing phone, connection thread), KitKat/reels (bench + tree, chat, floating hearts), Saleel jealousy ("totally not jealous." + storm cloud), New Year broken phone (night road, falling phone, cracked screen with two working lines), quiet semester (calendar, silent phone, empty chat), Wonderla (coaster + flags + crowd, moving car, "MURUGAAAA!!", hand-around-two-fingers inset), girls' room (string lights, friends, lap moment), confession (moonlit bench, they drift closer). Scene-specific motion: trembling, bobs, walking, coaster run, ring pulses. New file: `src/components/comic/Scenes.js`; crowd figures via MiniPerson.

@@ -160,6 +160,7 @@ const LibraryScene = () => (
         <Bubble delay={1.6} className="left-[26%] top-[46%]">"go talk to him."</Bubble>
         <Bubble delay={4.4} tail="right" className="right-[8%] top-[40%]">???</Bubble>
         <Note delay={2.6} className="left-[8%] top-[24%] rotate-[-3deg]">*she looks over. twice.*</Note>
+        <Note delay={3.8} className="left-[46%] top-[62%] rotate-[2deg]">tuk… tuk…</Note>
     </Panel>
 );
 
@@ -172,7 +173,7 @@ const FirstMessageScene = () => (
         </div>
         {/* phone in his hand */}
         <div className="absolute bottom-[24%] right-[26%] h-16 w-9 rotate-[-8deg] rounded-md border-2 border-[#1a1a1a] bg-[#fdfbf7]" />
-        <ChatCard className="absolute left-[6%] top-[34%] w-[46%]">
+        <ChatCard className="absolute left-[6%] top-[34%] w-[46%] max-md:w-[58%]">
             <ChatLine delay={0.6}>"Hi, I'm Anushika, your classmate."</ChatLine>
             <ChatLine delay={2.2}>"what did you say about me in the library??"</ChatLine>
             <ChatLine delay={4} right>
@@ -201,23 +202,24 @@ const CallScene = () => (
         <NightWindow className="absolute left-[3%] top-[6%] w-[18%]" />
         <Bed className="absolute bottom-[6%] left-[2%] w-[34%]" />
         <div className="anim-tremble absolute bottom-[10%] left-[26%]">
-            <Boy expr="nervous" className="w-24" />
+            <Boy expr="nervous" className="w-16 sm:w-24" />
         </div>
         {/* ringing phone */}
-        <div className="absolute left-[16%] top-[30%]">
+        <div className="absolute left-[16%] top-[30%] max-md:left-[24%]">
             <span className="anim-ring absolute -inset-3 rounded-full border-2 border-[#1a1a1a]" />
             <span className="anim-ring absolute -inset-3 rounded-full border-2 border-[#1a1a1a]" style={{ animationDelay: "0.4s" }} />
             <div className="flex h-16 w-9 items-center justify-center rounded-md border-2 border-[#1a1a1a] bg-[#fdfbf7]">
                 <span className="f-hand text-xs leading-tight text-[#1a1a1a]">anushika<br />calling…</span>
             </div>
         </div>
+        <Note delay={0.4} className="left-[7%] top-[20%] rotate-[-4deg]">trrr… trrr…</Note>
         {/* her room */}
         <NightWindow className="absolute right-[3%] top-[6%] w-[18%]" flip style={{ transform: "scaleX(-1)" }} />
         <Bed className="absolute bottom-[6%] right-[2%] w-[34%]" />
         <div className="anim-bob absolute bottom-[10%] right-[26%]">
-            <Girl expr="shy" className="w-24" />
+            <Girl expr="shy" className="w-16 sm:w-24" />
         </div>
-        <div className="absolute bottom-[34%] right-[38%] h-14 w-8 rotate-[8deg] rounded-md border-2 border-[#1a1a1a] bg-[#fdfbf7]" />
+        <div className="absolute bottom-[34%] right-[38%] h-14 w-8 rotate-[8deg] rounded-md border-2 border-[#1a1a1a] bg-[#fdfbf7] max-md:bottom-[30%] max-md:right-[6%]" />
         {/* connection line */}
         <svg viewBox="0 0 400 40" className="absolute left-[24%] top-[22%] w-[52%]">
             <path d="M6 30 Q200 -6 394 26" fill="none" stroke={GOLD} strokeWidth="1.6" strokeDasharray="4 5" filter="url(#inkRough)" />
@@ -253,9 +255,9 @@ const FlirtingScene = () => (
             <div className="f-hand border-2 border-[#c76d63] px-1.5 py-0 text-xs tracking-widest text-[#c76d63]">KITKAT</div>
         </div>
         {/* night side — phones + reels */}
-        <div className="absolute bottom-[10%] right-[4%] top-[8%] w-[46%] rounded-lg border-2 border-dashed border-[#1a1a1a]/35">
+        <div className="absolute bottom-[10%] right-[4%] top-[8%] w-[46%] rounded-lg border-2 border-dashed border-[#1a1a1a]/35 max-md:w-[56%]">
             <p className="f-hand absolute -top-4 right-2 bg-[#faf7ef] px-2 text-base text-[#1a1a1a]/60">later that night</p>
-            <ChatCard className="absolute left-[6%] top-[12%] w-[64%]">
+            <ChatCard className="absolute left-[6%] top-[12%] w-[64%] max-md:w-[82%]">
                 <ChatLine delay={0.6}>send that reel</ChatLine>
                 <ChatLine delay={1.5} right>already sent you three 😌</ChatLine>
                 <ChatLine delay={2.4}>…one more?</ChatLine>
@@ -281,7 +283,7 @@ const JealousyScene = () => (
             </g>
         </svg>
         <Girl expr="smile" className="anim-bob absolute bottom-[8%] left-[10%] w-20" />
-        <ChatCard className="absolute left-[26%] top-[16%] w-[38%]">
+        <ChatCard className="absolute left-[26%] top-[16%] w-[38%] max-md:w-[48%]">
             <ChatLine delay={0.6}>saleel was so funny today lol</ChatLine>
             <ChatLine delay={1.8} right>ha. hilarious.</ChatLine>
         </ChatCard>
@@ -296,6 +298,7 @@ const JealousyScene = () => (
                 </g>
             </motion.svg>
         </div>
+        <Note delay={3} className="right-[24%] top-[50%] rotate-[-3deg]">grrr…</Note>
         <Note delay={1.4} className="right-[10%] top-[18%] rotate-[3deg]">"totally not jealous."</Note>
     </Panel>
 );
@@ -324,6 +327,7 @@ const BrokenPhoneScene = () => (
             <div className="h-14 w-8 rounded-md border-2 border-[#1a1a1a] bg-[#fdfbf7]" />
         </motion.div>
         <Note delay={1.4} className="left-[24%] top-[10%]">*phone: falls*</Note>
+        <Note delay={1.7} className="left-[8%] bottom-[52%] rotate-[-5deg]">krrk!!</Note>
         {/* cracked phone, huge */}
         <div className="absolute bottom-[10%] left-[8%] h-40 w-24 rotate-[-6deg] rounded-xl border-[3px] border-[#1a1a1a] bg-[#fdfbf7] p-2">
             <div className="f-hand mt-1 border-b-2 border-[#1a1a1a]/40 pb-1 text-sm leading-tight">you still awake?</div>
@@ -367,7 +371,7 @@ const QuietSemesterScene = () => (
             <p className="f-hand mt-0.5 text-center text-[10px] text-[#1a1a1a]/45">no new messages</p>
         </div>
         {/* empty chat */}
-        <ChatCard className="absolute right-[8%] top-[14%] w-[40%] opacity-75">
+        <ChatCard className="absolute right-[8%] top-[14%] w-[40%] opacity-75 max-md:w-[50%]">
             <div className="f-hand mt-1 max-w-[85%] rounded-lg rounded-bl-none border-2 border-[#1a1a1a]/40 px-2 py-0.5 text-base text-[#1a1a1a]/45">
                 goodnight ✨
             </div>
@@ -410,14 +414,17 @@ const WonderlaScene = () => (
                 <MiniPerson key={i} className="absolute bottom-[4%] w-8" style={{ left: `${4 + i * 7}%` }} />
             ))}
             {/* ride car with both */}
-            <div className="anim-coaster absolute left-[16%] top-[30%] z-10">
-                <div className="relative h-14 w-36 rounded-lg border-[3px] border-[#1a1a1a] bg-[rgba(199,109,99,0.28)]">
-                    <Girl expr="shock" className="absolute -top-[4.4rem] left-2 w-14" />
-                    <Boy expr="nervous" className="absolute -top-16 right-2 w-14" />
+            <div className="anim-coaster absolute left-[16%] top-[30%] z-10 max-md:top-[38%]">
+                <div className="relative h-14 w-36 rounded-lg border-[3px] border-[#1a1a1a] bg-[rgba(199,109,99,0.28)] max-md:h-12 max-md:w-28">
+                    <Girl expr="shock" className="absolute -top-[4.4rem] left-2 w-14 max-md:-top-14 max-md:w-11" />
+                    <Boy expr="nervous" className="absolute -top-16 right-2 w-14 max-md:-top-[3.2rem] max-md:w-11" />
+                    <span className="f-hand absolute bottom-0.5 left-1/2 -translate-x-1/2 text-sm leading-none text-[#c76d63]">
+                        dhak dhak dhak
+                    </span>
                 </div>
-                <Note delay={1.4} className="-left-6 top-16 w-40">*death grip on his bicep*</Note>
+                <Note delay={1.4} className="-left-6 top-16 w-40 max-md:top-14">*death grip on his bicep*</Note>
             </div>
-            <Bubble delay={0.8} className="right-[8%] top-[10%]" tail="right">"MURUGAAAA!!"</Bubble>
+            <Bubble delay={0.8} className="right-[8%] top-[10%] max-md:right-[2%] max-md:top-[3%]" tail="right">"MURUGAAAA!!"</Bubble>
             <Bubble delay={2.2} className="left-[38%] top-[58%]">"open your eyes!"<br />"NO."</Bubble>
         </Panel>
         <Panel className="min-h-[220px]">
@@ -467,7 +474,7 @@ const GirlsRoomScene = () => (
         {/* him + her on his lap */}
         <Boy expr="shock" className="absolute bottom-[14%] left-[38%] w-24" />
         <motion.div
-            className="absolute bottom-[34%] left-[35%] z-10"
+            className="absolute bottom-[28%] left-[35%] z-10"
             initial={{ y: -14, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.8, duration: 0.9, ease: [0.3, 1.3, 0.5, 1] }}
@@ -475,7 +482,8 @@ const GirlsRoomScene = () => (
             <Girl expr="shy" className="w-20" style={{ transform: "rotate(-5deg)" }} />
         </motion.div>
         <InkDoodle kind="heart" className="anim-float-heart absolute left-[55%] top-[30%] w-5" />
-        <Note delay={1.8} className="left-[36%] top-[16%] rotate-[-2deg]">*kisses her hand*</Note>
+        <Note delay={2} className="left-[52%] top-[21%]">muah~</Note>
+        <Note delay={1.8} className="left-[36%] top-[16%] rotate-[-2deg] max-md:top-[10%]">*kisses her hand*</Note>
     </Panel>
 );
 
