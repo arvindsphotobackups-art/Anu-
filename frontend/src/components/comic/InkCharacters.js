@@ -1,8 +1,9 @@
 const INK = "#1a1a1a";
 const CORAL = "#c76d63";
+const GOLD = "#d4af37";
 const PAPER = "#f5f2eb";
 
-const Face = ({ expr, cx, cy }) => {
+const BoyFace = ({ expr, cx, cy }) => {
     const eyeY = cy - 3;
     switch (expr) {
         case "shy":
@@ -60,6 +61,81 @@ const Face = ({ expr, cx, cy }) => {
     }
 };
 
+const GirlFace = ({ expr, cx, cy }) => {
+    const eyeY = cy - 3;
+    switch (expr) {
+        case "shy":
+        case "love":
+            return (
+                <g stroke={INK} strokeWidth="2.4" strokeLinecap="round" fill="none">
+                    <path d={`M${cx - 13} ${eyeY} q4 5 8 0`} />
+                    <path d={`M${cx + 5} ${eyeY} q4 5 8 0`} />
+                    <path d={`M${cx - 8} ${cy + 9} q8 8 16 0`} />
+                    {expr === "love" && (
+                        <path
+                            d={`M${cx + 15} ${cy + 5} c-2-3-7-1-6 3 c1 3 6 5 6 5 c0 0 5-2 6-5 c1-4-4-6-6-3z`}
+                            fill={CORAL}
+                            stroke="none"
+                            opacity="0.85"
+                        />
+                    )}
+                </g>
+            );
+        case "shock":
+            return (
+                <g stroke={INK} strokeWidth="2.4" fill="none">
+                    <circle cx={cx - 8} cy={eyeY} r="2.6" fill={INK} stroke="none" />
+                    <circle cx={cx + 8} cy={eyeY} r="2.6" fill={INK} stroke="none" />
+                    <ellipse cx={cx} cy={cy + 10} rx="4" ry="5.5" />
+                </g>
+            );
+        case "sad":
+            return (
+                <g stroke={INK} strokeWidth="2.4" strokeLinecap="round" fill="none">
+                    <path d={`M${cx - 13} ${eyeY - 6} l7 3`} />
+                    <path d={`M${cx + 13} ${eyeY - 6} l-7 3`} />
+                    <circle cx={cx - 8} cy={eyeY} r="2" fill={INK} stroke="none" />
+                    <circle cx={cx + 8} cy={eyeY} r="2" fill={INK} stroke="none" />
+                    <path d={`M${cx - 6} ${cy + 12} q6 -5 12 0`} />
+                </g>
+            );
+        case "nervous":
+            return (
+                <g stroke={INK} strokeWidth="2.4" strokeLinecap="round" fill="none">
+                    <circle cx={cx - 8} cy={eyeY} r="2" fill={INK} stroke="none" />
+                    <circle cx={cx + 8} cy={eyeY} r="2" fill={INK} stroke="none" />
+                    <path d={`M${cx - 7} ${cy + 10} q3 3 6 0 q3 -3 6 0`} />
+                </g>
+            );
+        default:
+            // her signature bright open smile
+            return (
+                <g>
+                    <circle cx={cx - 8} cy={eyeY} r="2.2" fill={INK} />
+                    <circle cx={cx + 8} cy={eyeY} r="2.2" fill={INK} />
+                    <path
+                        d={`M${cx - 11} ${cy + 6} Q${cx} ${cy + 18} ${cx + 11} ${cy + 6} Q${cx + 5.5} ${cy + 16} ${cx} ${cy + 16} Q${cx - 5.5} ${cy + 16} ${cx - 11} ${cy + 6} Z`}
+                        fill={INK}
+                    />
+                    <path
+                        d={`M${cx - 9} ${cy + 7.5} Q${cx} ${cy + 13} ${cx + 9} ${cy + 7.5}`}
+                        stroke={PAPER}
+                        strokeWidth="1.5"
+                        fill="none"
+                    />
+                </g>
+            );
+    }
+};
+
+const Jhumka = ({ x, y }) => (
+    <g stroke="none" fill={GOLD}>
+        <circle cx={x} cy={y} r="1.7" />
+        <path d={`M${x - 2.6} ${y + 3.2} q2.6 -2.4 5.2 0 l-0.9 4.6 q-1.7 1.5 -3.4 0 z`} />
+        <circle cx={x} cy={y + 9.2} r="0.9" />
+    </g>
+);
+
 export const Boy = ({ expr = "smile", flip = false, className = "", style }) => (
     <svg
         viewBox="0 0 120 175"
@@ -67,18 +143,33 @@ export const Boy = ({ expr = "smile", flip = false, className = "", style }) => 
         style={{ ...(flip ? { transform: "scaleX(-1)" } : {}), ...style }}
         aria-label="him"
     >
-        <g filter="url(#inkRough)" stroke={INK} strokeWidth="3" strokeLinecap="round">
-            <path d="M38 84 q22 -13 44 0 l9 62 q-31 10 -62 0 z" fill={PAPER} />
-            <path d="M46 84 l14 12 l14 -12" fill="none" />
-            <path d="M38 90 q-10 20 -6 42" fill="none" />
-            <path d="M82 90 q10 20 6 42" fill="none" />
-            <circle cx="60" cy="48" r="26" fill={PAPER} />
+        <g filter="url(#inkRough)">
+            <circle cx="60" cy="48" r="26" fill={PAPER} stroke={INK} strokeWidth="3" />
+            {/* messy tousled hair */}
             <path
-                d="M33 46 q-1 -27 27 -27 q28 0 27 27 q-6 -14 -14 -11 q-4 -12 -15 -7 q-12 -5 -25 18 z"
+                d="M33 52 q-7 -40 28 -42 q34 -2 29 42 l-7 1 q3 -13 -2 -19 q-7 -7 -13 -5 q-5 -7 -11 -5 q-9 -2 -14 6 q-6 7 -3 22 z"
                 fill={INK}
                 stroke="none"
             />
-            <Face expr={expr} cx={60} cy={48} />
+            <g stroke={INK} strokeWidth="3" strokeLinecap="round" fill="none">
+                <path d="M47 33 q-2 7 -5 10" />
+                <path d="M60 29 q1 8 -2 11" />
+                <path d="M72 33 q3 7 1 11" />
+            </g>
+            {/* light stubble + mustache */}
+            <path d="M38 55 q5 16 22 18 q17 -2 22 -18" stroke={INK} strokeWidth="2" opacity="0.7" fill="none" />
+            {expr !== "shock" && (
+                <path d="M51 54 q9 4 18 0" stroke={INK} strokeWidth="2.4" fill="none" />
+            )}
+            <BoyFace expr={expr} cx={60} cy={48} />
+            {/* collared shirt */}
+            <path d="M38 88 q22 -14 44 0 l9 60 q-31 10 -62 0 z" fill={PAPER} stroke={INK} strokeWidth="3" />
+            <path d="M48 85 l12 13 l12 -13" fill="none" stroke={INK} strokeWidth="3" />
+            <path d="M60 98 v42" stroke={INK} strokeWidth="2" />
+            <circle cx="60" cy="112" r="1.5" fill={INK} stroke="none" />
+            <circle cx="60" cy="126" r="1.5" fill={INK} stroke="none" />
+            <path d="M38 94 q-10 20 -6 42" fill="none" stroke={INK} strokeWidth="3" />
+            <path d="M82 94 q10 20 6 42" fill="none" stroke={INK} strokeWidth="3" />
         </g>
     </svg>
 );
@@ -90,19 +181,26 @@ export const Girl = ({ expr = "smile", flip = false, className = "", style }) =>
         style={{ ...(flip ? { transform: "scaleX(-1)" } : {}), ...style }}
         aria-label="her"
     >
-        <g filter="url(#inkRough)" stroke={INK} strokeWidth="3" strokeLinecap="round">
+        <g filter="url(#inkRough)">
+            {/* long wavy hair strands */}
+            <g fill={INK} stroke="none">
+                <path d="M35 46 q-10 34 -6 68 q1 14 -3 26 l14 2 q4 -12 2 -27 q-1 -30 2 -56 z" />
+                <path d="M85 46 q10 34 6 68 q-1 14 3 26 l-14 2 q-4 -12 -2 -27 q1 -30 -2 -56 z" />
+            </g>
+            <circle cx="60" cy="50" r="24" fill={PAPER} stroke={INK} strokeWidth="3" />
+            {/* side-parted sweep */}
             <path
-                d="M31 52 q-4 -34 29 -34 q33 0 29 34 q6 40 10 72 q-9 9 -17 2 q3 -36 -1 -54 l-42 0 q-4 18 -1 54 q-8 7 -17 -2 q4 -32 10 -72 z"
+                d="M37 48 q-3 -24 23 -26 q26 -2 24 26 q-6 -14 -18 -15 q-6 8 -14 9 q-9 1 -15 6 z"
                 fill={INK}
                 stroke="none"
             />
-            <circle cx="60" cy="50" r="24" fill={PAPER} />
-            <path d="M36 48 q0 -26 24 -26 q24 0 24 26 q-10 -14 -24 -14 q-14 0 -24 14 z" fill={INK} stroke="none" />
-            <rect x="76" y="30" width="9" height="5" rx="2" fill={CORAL} stroke="none" transform="rotate(18 80 32)" />
-            <Face expr={expr} cx={60} cy={50} />
-            <path d="M40 96 q20 -11 40 0 l11 60 q-31 11 -62 0 z" fill={PAPER} />
-            <path d="M40 102 q-9 20 -5 40" fill="none" />
-            <path d="M80 102 q9 20 5 40" fill="none" />
+            <GirlFace expr={expr} cx={60} cy={50} />
+            <Jhumka x={35} y={55} />
+            <Jhumka x={85} y={55} />
+            {/* top */}
+            <path d="M40 98 q20 -11 40 0 l11 58 q-31 11 -62 0 z" fill={PAPER} stroke={INK} strokeWidth="3" />
+            <path d="M40 104 q-9 20 -5 40" fill="none" stroke={INK} strokeWidth="3" />
+            <path d="M80 104 q9 20 5 40" fill="none" stroke={INK} strokeWidth="3" />
         </g>
     </svg>
 );

@@ -1,5 +1,9 @@
-Drop a soft instrumental track here named `ambient.mp3`.
+# Music
 
-The music button in the top-right corner references `/audio/ambient.mp3`.
-It never autoplays — it only plays after the visitor taps the button,
-and fades in/out gently. Until you add a file, the button simply stays silent.
+`ambient.wav` is a soft generated placeholder track (a slow pad with sparse music-box
+notes) so the music button works out of the box.
+
+To use YOUR song instead: replace `ambient.wav` with your own file (keep the same
+name), or drop in an mp3 and update the `src` in `src/components/MusicControl.js`.
+
+It never autoplays — the corner button fades it in and out gently.

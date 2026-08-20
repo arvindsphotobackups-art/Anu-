@@ -15,6 +15,11 @@ Build a FRONTEND-ONLY interactive romantic story website (personal gift). No bac
 - The gift recipient (her): explores chapters sequentially, discovers hidden interactions.
 - The creator (him): edits texts in `src/data/*` and swaps placeholder images.
 
+## Implemented (2026-08-21, iteration 2)
+- Comic couple redrawn from the user's real reference photos: him = tousled messy fringe, stubble + mustache, collared shirt; her = side-parted long wavy hair, gold jhumka earrings, signature bright open smile (`src/components/comic/InkCharacters.js`).
+- Comic page-turning by finger swipe/drag (framer-motion drag, elastic snap) + mobile "swipe to turn the page" hint.
+- Music enabled: generated soft ambient placeholder track at `public/audio/ambient.wav` (slow pad + sparse music-box notes, 36s loop); corner button fades it in/out. User can replace with their own song.
+
 ## Implemented (2026-08-20)
 - Ch I Landing: night scene, gradual stars/city fade-in, mouse parallax, 3 hidden clickable stars w/ handwritten notes, interactive beating heart accent, couple silhouette hover ("This part comes later."), foliage sway, vignette, Enter → cinematic star-convergence transition.
 - Ch II Memories: 5 polaroids each with unique interaction (flip, pull-tab note, corner peel, crumpled note unfold, film-develop), progress "Memories discovered: x/5", 3 hidden stars, "open when…" envelope, unlock gate to Ch III.

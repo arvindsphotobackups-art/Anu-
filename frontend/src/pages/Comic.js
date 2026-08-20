@@ -170,8 +170,8 @@ const Scene = ({ index }) => {
         case 8:
             return (
                 <Panel>
-                    <Girl expr="shy" className="absolute bottom-0 left-[14%] w-26" />
-                    <Boy expr="love" className="absolute bottom-0 right-[14%] w-26" flip />
+                    <Girl expr="shy" className="absolute bottom-0 left-[14%] w-24" />
+                    <Boy expr="love" className="absolute bottom-0 right-[14%] w-24" flip />
                     <Bubble className="left-[8%] top-[8%]">"i have feelings…"</Bubble>
                     <Bubble className="right-[8%] top-[30%]" tail="right">"take the chance."</Bubble>
                     <InkDoodle kind="heart" className="absolute left-[46%] top-[18%] w-7 rotate-3" />
@@ -225,7 +225,19 @@ export default function Comic({ onFinish }) {
                 <div className="tape -top-3 left-8 z-10 rotate-[-6deg]" />
                 <div className="tape tape-coral -top-3 right-8 z-10 rotate-[5deg]" />
 
-                <div className="rounded-[3px] border-2 border-[#1a1a1a]/80 bg-[#fdfbf7] p-4 shadow-[6px_8px_0_rgba(26,26,26,0.15)] sm:p-8">
+                <motion.div
+                    drag="x"
+                    dragConstraints={{ left: 0, right: 0 }}
+                    dragElastic={0.16}
+                    onDragEnd={(e, info) => {
+                        if (info.offset.x < -70) go(1);
+                        else if (info.offset.x > 70) go(-1);
+                    }}
+                    whileDrag={{ scale: 0.99, cursor: "grabbing" }}
+                    style={{ touchAction: "pan-y" }}
+                    className="rounded-[3px] border-2 border-[#1a1a1a]/80 bg-[#fdfbf7] p-4 shadow-[6px_8px_0_rgba(26,26,26,0.15)] sm:p-8"
+                    data-testid="comic-swipe-area"
+                >
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={idx}
@@ -275,7 +287,7 @@ export default function Comic({ onFinish }) {
                             )}
                         </motion.div>
                     </AnimatePresence>
-                </div>
+                </motion.div>
 
                 {/* controls */}
                 <div className="mt-8 flex items-center justify-between">
@@ -310,6 +322,9 @@ export default function Comic({ onFinish }) {
                         <ArrowRight size={17} />
                     </button>
                 </div>
+                <p className="f-hand mt-5 text-center text-lg text-[#1a1a1a]/45 md:hidden">
+                    swipe to turn the page
+                </p>
             </div>
         </div>
     );

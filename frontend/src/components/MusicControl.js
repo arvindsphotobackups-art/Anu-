@@ -41,7 +41,7 @@ export default function MusicControl() {
 
     return (
         <div className="fixed right-5 top-5 z-[70] flex items-center gap-2">
-            <audio ref={audioRef} loop preload="none" src="/audio/ambient.mp3" />
+            <audio ref={audioRef} loop preload="none" src="/audio/ambient.wav" />
             {playing && (
                 <span className="flex h-3 items-end gap-[3px]" data-testid="music-playing-indicator">
                     {[0, 1, 2].map((i) => (
