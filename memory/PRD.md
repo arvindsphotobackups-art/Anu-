@@ -15,6 +15,9 @@ Build a FRONTEND-ONLY interactive romantic story website (personal gift). No bac
 - The gift recipient (her): explores chapters sequentially, discovers hidden interactions.
 - The creator (him): edits texts in `src/data/*` and swaps placeholder images.
 
+## Implemented (2026-08-21, iteration 3)
+- Comic cover dedication: handwritten coral "for Anushika ♡" inscription inked into slide 0.
+
 ## Implemented (2026-08-21, iteration 2)
 - Comic couple redrawn from the user's real reference photos: him = tousled messy fringe, stubble + mustache, collared shirt; her = side-parted long wavy hair, gold jhumka earrings, signature bright open smile (`src/components/comic/InkCharacters.js`).
 - Comic page-turning by finger swipe/drag (framer-motion drag, elastic snap) + mobile "swipe to turn the page" hint.

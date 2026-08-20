@@ -36,6 +36,12 @@ const Scene = ({ index }) => {
                     <InkDoodle kind="heart" className="absolute left-[46%] top-[16%] w-6 rotate-6" />
                     <InkDoodle kind="star" className="absolute left-[12%] top-[20%] w-5 -rotate-12" />
                     <InkDoodle kind="star" className="absolute right-[14%] top-[32%] w-4 rotate-6" />
+                    <p
+                        data-testid="comic-dedication"
+                        className="f-hand absolute bottom-3 right-4 rotate-[-3deg] text-xl text-[#c76d63]"
+                    >
+                        for Anushika ♡
+                    </p>
                 </Panel>
             );
         case 1:
