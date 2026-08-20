@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="560" viewBox="0 0 600 560">
+  <rect width="600" height="560" fill="url(#g)"/>
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1c1712"/>
+      <stop offset="100%" stop-color="#0b0906"/>
+    </linearGradient>
+  </defs>
+  <circle cx="500" cy="100" r="36" fill="#d4af37" opacity="0.55"/>
+  <path d="M0 400 q150 -60 300 -20 q150 40 300 -30 v210 h-600 z" fill="#0d0a07"/>
+  <path d="M120 400 q60 -120 30 -220 M150 400 q90 -100 70 -200 M480 410 q-60 -110 -40 -210" stroke="#171208" stroke-width="10" fill="none"/>
+  <g fill="#d4af37" opacity="0.6">
+    <circle cx="180" cy="430" r="3"/><circle cx="300" cy="420" r="4"/><circle cx="420" cy="440" r="3"/>
+  </g>
+  <text x="300" y="510" font-family="Georgia, serif" font-size="22" font-style="italic" fill="#8b8b91" text-anchor="middle">memory 2 — first outing</text>
+</svg>

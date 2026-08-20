@@ -1,0 +1,143 @@
+{
+  "theme": "dark",
+  "project_type": "interactive_story_site",
+  "visual_direction": "cinematic + dark + intimate + sophisticated + warm",
+  "forbidden_elements": [
+    "Predominantly pink designs",
+    "Pink backgrounds or excessive pink gradients",
+    "Giant glowing pink hearts or roses",
+    "Cheesy Valentine's Day aesthetics",
+    "Generic romantic templates",
+    "Excessive floating hearts",
+    "Anime, chibi, or generic AI cartoon styles in the comic section"
+  ],
+  "typography": {
+    "headings": {
+      "family": "'Cormorant Garamond', serif",
+      "import_url": "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap",
+      "usage": "Major headings, chapter titles, cinematic reveals"
+    },
+    "body": {
+      "family": "'Manrope', sans-serif",
+      "import_url": "https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500&display=swap",
+      "usage": "UI elements, navigation hints, small reading text"
+    },
+    "handwritten": {
+      "family": "'Caveat', cursive",
+      "import_url": "https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600&display=swap",
+      "usage": "Personal notes, doodles, letters, comic typography"
+    }
+  },
+  "colors": {
+    "backgrounds": {
+      "void": "#030305",
+      "near_black": "#0a0a0c",
+      "midnight_navy": "#0B101E",
+      "deep_charcoal": "#121214",
+      "cream_paper": "#F5F2EB"
+    },
+    "text": {
+      "primary": "#FDFBF7",
+      "secondary": "#A1A1A6",
+      "dark_ink": "#1A1A1A"
+    },
+    "accents": {
+      "amber_gold": "#D4AF37",
+      "muted_coral": "#C76D63",
+      "warm_glow": "rgba(212, 175, 55, 0.15)"
+    }
+  },
+  "visual_enhancers": {
+    "textures": [
+      "Film grain overlay across chapters 1-4, 6 (using CSS noise or SVG filter)",
+      "Imperfect paper texture for Chapter 5 (Comic)"
+    ],
+    "lighting": [
+      "Warm radial gradients acting as 'lamps' or 'streetlights' (e.g., radial-gradient(circle, rgba(212,175,55,0.1) 0%, rgba(0,0,0,0) 70%))",
+      "Vignette effects around the edges to focus attention on the center"
+    ]
+  },
+  "grids_and_layouts": {
+    "global_navigation": "No standard navbar. Use chapter-based progression (cinematic transitions between components). State persisted client-side.",
+    "chapter_1_landing": "Full viewport height, centered alignment for title, absolute positioning for parallax stars and foreground silhouettes.",
+    "chapter_2_memories": "Asymmetric Bento or scatter layout for polaroids. Overlapping z-indexes, varying subtle rotations.",
+    "chapter_3_little_world": "Fixed aspect ratio 'stage' (ambient living room scene) with absolutely positioned interactive elements.",
+    "chapter_4_apology": "Minimalist centered layout, dark room focus on the desk lamp and physical envelope elements.",
+    "chapter_5_comic": "Scrapbook aesthetic. Cream paper background. Multi-slide or vertical scroll with taped notes and hand-drawn elements.",
+    "chapter_6_final": "Maximum negative space. Centered text reveals, ending in a single responsive image container."
+  },
+  "motion_and_interactions": {
+    "philosophy": "Cinematic, slow, intentional. High-quality ease-in-out curves. Framer Motion is mandatory.",
+    "transitions": "Slow crossfades, subtle blurs, and scale-ins.",
+    "chapter_1": "Stars appear gradually, ambient movement. Mouse parallax on stars/foreground. Hovering near silhouette brightens it. Clickable hidden stars.",
+    "chapter_2": "Polaroids lift on hover. Click reveals handwritten notes/stickers. Progress tracks 'Memories discovered: 0/5'.",
+    "chapter_3": "Objects animate independently on loops (e.g., breathing lamp, moving curtains, beating heart).",
+    "chapter_6": "Typewriter effect or slow opacity reveals for text. Sequential storytelling."
+  },
+  "media": {
+    "urls": [
+      {
+        "category": "landing_silhouette",
+        "url": "https://images.pexels.com/photos/38069557/pexels-photo-38069557.jpeg",
+        "description": "Couple silhouette night city lights"
+      },
+      {
+        "category": "polaroid_memory_1",
+        "url": "https://images.pexels.com/photos/7553240/pexels-photo-7553240.jpeg",
+        "description": "Vintage polaroid of couple"
+      },
+      {
+        "category": "polaroid_memory_2",
+        "url": "https://images.pexels.com/photos/8602412/pexels-photo-8602412.png",
+        "description": "Joyful couple indoors"
+      },
+      {
+        "category": "polaroid_memory_3",
+        "url": "https://images.unsplash.com/photo-1614331615507-945322cc6e57",
+        "description": "Vintage photo aesthetic"
+      },
+      {
+        "category": "apology_lamp",
+        "url": "https://images.unsplash.com/photo-1552858725-a19e7fcd3ac4",
+        "description": "Warm desk lamp dark room"
+      },
+      {
+        "category": "final_photo",
+        "url": "https://images.unsplash.com/photo-1636119475872-7e84f2f737f0",
+        "description": "Final placeholder photograph"
+      }
+    ]
+  },
+  "instructions_to_main_agent": {
+    "setup": [
+      "This is a FRONTEND-ONLY interactive romantic story website. Do not build a backend.",
+      "Import the Google Fonts in index.css.",
+      "Setup Framer Motion for all complex animations.",
+      "Use lucide-react for minimal icons (like music play/pause)."
+    ],
+    "execution_phases": [
+      "1. Build the global layout wrapper and state management for chapter progression.",
+      "2. Implement Chapter 1 with audio control, parallax, hidden stars, and cinematic enter transition.",
+      "3. Implement Chapter 2 with 5 interactive polaroids and the unlock logic.",
+      "4. Implement Chapter 3 with the ambient room and independently animating CSS/Framer elements.",
+      "5. Implement Chapter 4 with the 5 envelope letters.",
+      "6. Implement Chapter 5 with the scrapbook comic style (switch background to cream, text to dark ink).",
+      "7. Implement Chapter 6 with cinematic text reveals."
+    ]
+  },
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "Create depth through layered design elements with z-index hierarchy.",
+    "Use glass-morphism effects with backdrop filters (12-24px blur) only where it enhances the cinematic feel. DO NOT use completely transparent backgrounds for overlays.",
+    "You MUST NOT apply universal transitions (transition: all).",
+    "You MUST NOT center align the app container in global CSS.",
+    "NEVER use placeholder URLs (via.placeholder.com etc). Use provided media URLs.",
+    "Every interaction needs micro-animations - hover states, transitions, entrance animations.",
+    "Use 2-3x more spacing than feels comfortable.",
+    "All interactive and key informational elements MUST include a data-testid attribute.",
+    "Do not use generic AI assistant emojis."
+  ],
+  "accessibility": {
+    "contrast": "Ensure text contrast meets APCA/WCAG standards. Use subtle text-shadows over images.",
+    "motion": "Respect prefers-reduced-motion for continuous looping animations."
+  }
+}
