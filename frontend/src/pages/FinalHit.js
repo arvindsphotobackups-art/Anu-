@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const STEPS = [
@@ -59,8 +59,67 @@ const CODA = [
     "He just didn't know it yet.",
 ];
 
+const EDGE = [
+    { l: 5, t: 12, r: -3 }, { l: 78, t: 10, r: 2 }, { l: 3, t: 36, r: 2 },
+    { l: 80, t: 34, r: -2 }, { l: 6, t: 60, r: -1 }, { l: 79, t: 58, r: 3 },
+    { l: 9, t: 82, r: 2 }, { l: 76, t: 80, r: -3 }, { l: 30, t: 4, r: 1 },
+    { l: 60, t: 5, r: -1 }, { l: 2, t: 78, r: 1 }, { l: 84, t: 78, r: -1 },
+    { l: 44, t: 3, r: 2 },
+];
+
+const ASSEMBLE = [
+    { l: 10, t: 12, r: -2 }, { l: 42, t: 60, r: -1 }, { l: 6, t: 36, r: 2 },
+    { l: 76, t: 4, r: 2 }, { l: 76, t: 34, r: -2 }, { l: 6, t: 64, r: -1 },
+    { l: 72, t: 62, r: 1 }, { l: 16, t: 84, r: 2 }, { l: 24, t: 4, r: 1 },
+    { l: 56, t: 4, r: -1 }, { l: 56, t: 86, r: -2 }, { l: 82, t: 82, r: 2 },
+    { l: 40, t: 88, r: 0 },
+];
+
+const Fragment = ({ s, i, assembled }) => {
+    const pos = assembled ? ASSEMBLE[i] : EDGE[i];
+    return (
+        <motion.div
+            data-testid={`final-fragment-${i}`}
+            className="absolute z-[5] max-w-[132px] md:max-w-[210px]"
+            initial={{ opacity: 0, left: `${EDGE[i].l}%`, top: `${EDGE[i].t}%`, rotate: EDGE[i].r }}
+            animate={{ opacity: assembled ? 0.92 : 0.6, left: `${pos.l}%`, top: `${pos.t}%`, rotate: pos.r }}
+            transition={{
+                duration: assembled ? 2.8 : 1.6,
+                delay: assembled ? 0.3 + i * 0.16 : 0,
+                ease: [0.22, 1, 0.36, 1],
+            }}
+        >
+            <div className="fragment-float" style={{ animationDelay: `${i * 0.65}s` }}>
+                {s.photo ? (
+                    <div className="border border-[#f5f2eb]/15 bg-[#0a0a0c] p-1">
+                        <img
+                            src="/images/final/photo.svg"
+                            alt="us"
+                            className={`transition-all duration-[2500ms] ${assembled ? "w-32 md:w-44" : "w-14 md:w-20"}`}
+                        />
+                    </div>
+                ) : (
+                    s.lines.map((l, j) => (
+                        <p
+                            key={j}
+                            className={`f-serif font-light leading-snug transition-all duration-[2500ms] ${
+                                assembled
+                                    ? "text-xs text-[#fdfbf7]/80 md:text-sm"
+                                    : "text-[10px] text-[#fdfbf7]/45 md:text-xs"
+                            }`}
+                        >
+                            {l}
+                        </p>
+                    ))
+                )}
+            </div>
+        </motion.div>
+    );
+};
+
 export default function FinalHit() {
     const [step, setStep] = useState(0);
+    const [assembled, setAssembled] = useState(false);
     const [codaOpen, setCodaOpen] = useState(false);
     const [codaIdx, setCodaIdx] = useState(0);
     const [ended, setEnded] = useState(false);
@@ -79,7 +138,7 @@ export default function FinalHit() {
 
     const current = STEPS[step];
     const isLast = step === STEPS.length - 1;
-    const showStars = STEPS.slice(0, step + 1).some((s) => s.stars);
+    const showStars = assembled || ended || STEPS.slice(0, step + 1).some((s) => s.stars);
 
     const advance = () => {
         if (ended) return;
@@ -88,8 +147,17 @@ export default function FinalHit() {
             else setEnded(true);
             return;
         }
+        if (assembled) return;
         setStep((s) => Math.min(s + 1, STEPS.length - 1));
     };
+
+    useEffect(() => {
+        if (!isLast) return undefined;
+        const t = setTimeout(() => setAssembled(true), 5200);
+        return () => clearTimeout(t);
+    }, [isLast]);
+
+    const done = STEPS.slice(0, step);
 
     return (
         <div
@@ -118,8 +186,14 @@ export default function FinalHit() {
                 ))}
             </div>
 
+            {/* accumulated fragments of the story, hanging around the edges */}
+            {done.map((s, i) => (
+                <Fragment key={i} s={s} i={i} assembled={assembled} />
+            ))}
+
+            {/* current message, one at a time */}
             <AnimatePresence mode="wait">
-                {!codaOpen && !ended && (
+                {!assembled && !codaOpen && !ended && (
                     <motion.div
                         key={step}
                         initial={{ opacity: 0, y: 18 }}
@@ -165,25 +239,59 @@ export default function FinalHit() {
                                 ))}
                             </div>
                         )}
-
-                        {isLast && (
-                            <motion.button
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 4, duration: 2 }}
-                                data-testid="final-one-last-thing"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    setCodaOpen(true);
-                                }}
-                                className="f-hand mt-16 text-xl text-[#a1a1a6] underline decoration-[#d4af37]/25 underline-offset-8 transition-colors duration-500 hover:text-[#f5ecd7]"
-                            >
-                                one last thing…
-                            </motion.button>
-                        )}
                     </motion.div>
                 )}
+            </AnimatePresence>
 
+            {/* the final assembly: everything returns to form one page */}
+            {assembled && (!codaOpen || ended) && (
+                <motion.div
+                    initial={{ opacity: 0, y: 18 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 2.4, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                    className="absolute left-1/2 top-[20%] z-10 w-full max-w-2xl -translate-x-1/2 px-6 text-center"
+                    data-testid="final-assembly"
+                >
+                    <p className="f-serif text-4xl font-light text-[#fdfbf7] sm:text-5xl">
+                        This was always for you.
+                    </p>
+                    {/* quiet references to the earlier chapters */}
+                    <div className="mt-7 flex items-center justify-center gap-6 opacity-60">
+                        <svg viewBox="0 0 24 24" className="h-3.5 w-3.5">
+                            <path d="M12 2 l2.4 6.4 l6.6 0.4 l-5.2 4.2 l1.8 6.4 l-5.6 -3.8 l-5.6 3.8 l1.8 -6.4 l-5.2 -4.2 l6.6 -0.4 z" fill="none" stroke="#d4af37" strokeWidth="1.4" />
+                        </svg>
+                        <div className="tape" style={{ position: "relative", width: 34, height: 12 }} />
+                        <svg viewBox="0 0 28 20" className="h-4 w-6">
+                            <rect x="1" y="1" width="26" height="18" rx="1" fill="none" stroke="#f5f2eb" strokeWidth="1.4" />
+                            <path d="M1 1 l13 11 l13 -11" fill="none" stroke="#f5f2eb" strokeWidth="1.4" />
+                        </svg>
+                        <svg viewBox="0 0 40 16" className="h-4 w-9">
+                            <path d="M4 12 Q20 2 36 10" fill="none" stroke="#d4af37" strokeWidth="1" strokeDasharray="2 3" />
+                            <circle cx="4" cy="12" r="1.6" fill="#f5ecd7" />
+                            <circle cx="36" cy="10" r="1.6" fill="#f5ecd7" />
+                        </svg>
+                    </div>
+                </motion.div>
+            )}
+
+            {assembled && !codaOpen && !ended && (
+                <motion.button
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 5, duration: 2 }}
+                    data-testid="final-one-last-thing"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setCodaOpen(true);
+                    }}
+                    className="f-hand absolute bottom-[7%] left-1/2 z-20 -translate-x-1/2 text-xl text-[#a1a1a6] underline decoration-[#d4af37]/25 underline-offset-8 transition-colors duration-500 hover:text-[#f5ecd7]"
+                >
+                    one last thing…
+                </motion.button>
+            )}
+
+            {/* coda, over the dimmed composition */}
+            <AnimatePresence mode="wait">
                 {codaOpen && !ended && (
                     <motion.p
                         key={`coda-${codaIdx}`}
@@ -191,26 +299,25 @@ export default function FinalHit() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
                         transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
-                        className="f-serif relative z-10 max-w-xl text-center text-2xl font-light italic leading-relaxed text-[#fdfbf7]/95 sm:text-3xl"
+                        className="f-serif absolute left-1/2 top-1/2 z-30 w-full max-w-xl -translate-x-1/2 -translate-y-1/2 rounded-sm bg-[#030305]/70 px-6 py-10 text-center text-2xl font-light italic leading-relaxed text-[#fdfbf7] backdrop-blur-[2px] sm:text-3xl"
                         data-testid={`final-coda-${codaIdx}`}
                     >
                         {CODA[codaIdx]}
                     </motion.p>
                 )}
-
-                {ended && (
-                    <motion.p
-                        key="end"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 3 }}
-                        className="f-ui relative z-10 text-[10px] uppercase tracking-[0.5em] text-[#a1a1a6]/60"
-                        data-testid="final-end"
-                    >
-                        — end —
-                    </motion.p>
-                )}
             </AnimatePresence>
+
+            {ended && (
+                <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 3 }}
+                    className="f-ui absolute bottom-[7%] left-1/2 z-30 -translate-x-1/2 text-[10px] uppercase tracking-[0.5em] text-[#a1a1a6]/60"
+                    data-testid="final-end"
+                >
+                    — end —
+                </motion.p>
+            )}
 
             {/* hint */}
             {!isLast && !codaOpen && !ended && (

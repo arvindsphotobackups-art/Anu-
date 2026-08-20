@@ -15,6 +15,12 @@ Build a FRONTEND-ONLY interactive romantic story website (personal gift). No bac
 - The gift recipient (her): explores chapters sequentially, discovers hidden interactions.
 - The creator (him): edits texts in `src/data/*` and swaps placeholder images.
 
+## Implemented (2026-08-21, iteration 4 — behavioral refinements)
+- Landing: star messages replaced with relationship-specific witty notes; added tiny handwritten discovery hint that vanishes after the first star click.
+- Little World: teddy idle-breathes + hug message about babying; phone shows "anushika sent you a reel ❤️" notification + click reveals reels memory; lamp click reveals 3am-conversation memory; clock clickable — hands swing to ~1am with "somewhere past 1am, again."; pink heart decoration replaced by a two-stars-and-thread constellation motif.
+- Apology: drifting dust motes in the lamplight (layout untouched).
+- Final Hit: previous messages no longer vanish — they move to the screen edges and dangle there (fragment-float); after the final message, all fragments slowly return to center and form one final composition (main message + photo + all fragments + motifs referencing earlier chapters); coda and quiet END play over the composition.
+
 ## Implemented (2026-08-21, iteration 3)
 - Comic cover dedication: handwritten coral "for Anushika ♡" inscription inked into slide 0.
 

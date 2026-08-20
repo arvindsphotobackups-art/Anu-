@@ -185,9 +185,30 @@ body {
     background: rgba(199, 109, 99, 0.3);
 }
 
+@keyframes fragmentFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-5px) rotate(0.7deg); }
+}
+
+@keyframes breatheScale {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.035); }
+}
+
+@keyframes mote {
+    0% { transform: translate(0, 0); opacity: 0; }
+    15% { opacity: 0.6; }
+    80% { opacity: 0.4; }
+    100% { transform: translate(12px, -130px); opacity: 0; }
+}
+
+.fragment-float { animation: fragmentFloat 7s ease-in-out infinite; }
+.anim-breathe-scale { animation: breatheScale 4.5s ease-in-out infinite; transform-origin: bottom center; }
+.anim-mote { animation: mote 10s linear infinite; }
+
 @media (prefers-reduced-motion: reduce) {
     .anim-twinkle, .anim-heartbeat, .anim-breathe, .anim-sway,
-    .anim-flicker, .grain, .eq-bar {
+    .anim-flicker, .grain, .eq-bar, .fragment-float, .anim-breathe-scale, .anim-mote {
         animation: none !important;
     }
 }

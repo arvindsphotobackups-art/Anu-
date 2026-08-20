@@ -39,6 +39,14 @@ const LetterModal = ({ title, body, closing, handwritten, onClose, testid }) => 
     </motion.div>
 );
 
+const MOTES = Array.from({ length: 14 }, (_, i) => ({
+    left: `${(i * 37) % 100}%`,
+    bottom: `${(i * 23) % 55}%`,
+    size: 1.5 + ((i * 7) % 3) * 0.7,
+    delay: (i * 1.3) % 9,
+    dur: 8 + ((i * 5) % 6),
+}));
+
 const Envelope = ({ letter, opened, onOpen, index }) => (
     <motion.button
         initial={{ opacity: 0, y: 30 }}
@@ -154,6 +162,23 @@ export default function Apology({ opened, onOpenLetter, finalRead, onFinalRead, 
             {/* desk */}
             <div className="relative z-10 mx-auto mt-20 max-w-5xl px-6 pb-16">
                 <div className="relative rounded-sm bg-gradient-to-b from-[#14110c] to-[#0c0a07] px-6 py-14 shadow-[inset_0_1px_0_rgba(212,175,55,0.06)]">
+                    {/* dust motes drifting in the lamplight */}
+                    <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-sm">
+                        {MOTES.map((m, i) => (
+                            <span
+                                key={i}
+                                className="anim-mote absolute rounded-full bg-[#d4af37]"
+                                style={{
+                                    left: m.left,
+                                    bottom: m.bottom,
+                                    width: m.size,
+                                    height: m.size,
+                                    animationDelay: `${m.delay}s`,
+                                    animationDuration: `${m.dur}s`,
+                                }}
+                            />
+                        ))}
+                    </div>
                     <div className="flex flex-wrap items-end justify-center gap-6 sm:gap-8">
                         {LETTERS.map((l, i) => (
                             <Envelope

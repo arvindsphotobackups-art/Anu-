@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function LittleWorld({ onVisit, onNext }) {
     const [hugged, setHugged] = useState(false);
     const [phoneLit, setPhoneLit] = useState(false);
+    const [phoneNote, setPhoneNote] = useState(false);
+    const [lampNote, setLampNote] = useState(false);
+    const [clockTap, setClockTap] = useState(false);
     const [ready, setReady] = useState(false);
 
     useEffect(() => {
@@ -16,6 +19,22 @@ export default function LittleWorld({ onVisit, onNext }) {
     const hug = () => {
         setHugged(true);
         setTimeout(() => setHugged(false), 3500);
+    };
+
+    const tapPhone = () => {
+        setPhoneLit((p) => !p);
+        setPhoneNote(true);
+        setTimeout(() => setPhoneNote(false), 4500);
+    };
+
+    const tapLamp = () => {
+        setLampNote(true);
+        setTimeout(() => setLampNote(false), 4500);
+    };
+
+    const tapClock = () => {
+        setClockTap(true);
+        setTimeout(() => setClockTap(false), 5000);
     };
 
     return (
@@ -89,7 +108,12 @@ export default function LittleWorld({ onVisit, onNext }) {
             </div>
 
             {/* clock */}
-            <div className="absolute right-[12%] top-[10%] flex flex-col items-center" data-testid="world-clock">
+            <button
+                className="absolute right-[12%] top-[10%] flex flex-col items-center"
+                data-testid="world-clock"
+                onClick={tapClock}
+                aria-label="clock"
+            >
                 <div className="relative h-24 w-24 rounded-full border-2 border-[#f5f2eb]/15 bg-[#0a0a0e]">
                     {[...Array(12)].map((_, i) => (
                         <span
@@ -102,17 +126,27 @@ export default function LittleWorld({ onVisit, onNext }) {
                         />
                     ))}
                     <span
-                        className="absolute bottom-1/2 left-1/2 h-7 w-[3px] origin-bottom -translate-x-1/2 rounded bg-[#f5f2eb]/70"
-                        style={{ animation: "spin 240s linear infinite" }}
+                        className="absolute bottom-1/2 left-1/2 h-7 w-[3px] origin-bottom rounded bg-[#f5f2eb]/70"
+                        style={
+                            clockTap
+                                ? { transform: "translateX(-50%) rotate(32deg)", transition: "transform 1.4s ease" }
+                                : { animation: "spin 240s linear infinite" }
+                        }
                     />
                     <span
-                        className="absolute bottom-1/2 left-1/2 h-10 w-[2px] origin-bottom -translate-x-1/2 rounded bg-[#d4af37]/80"
-                        style={{ animation: "spin 24s linear infinite" }}
+                        className="absolute bottom-1/2 left-1/2 h-10 w-[2px] origin-bottom rounded bg-[#d4af37]/80"
+                        style={
+                            clockTap
+                                ? { transform: "translateX(-50%) rotate(4deg)", transition: "transform 1.4s ease" }
+                                : { animation: "spin 24s linear infinite" }
+                        }
                     />
                     <span className="absolute left-1/2 top-1/2 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#f5f2eb]" />
                 </div>
-                <p className="f-hand mt-2 text-lg text-[#a1a1a6]">somewhere past 1am</p>
-            </div>
+                <p className="f-hand mt-2 text-lg text-[#a1a1a6]" data-testid="clock-caption">
+                    {clockTap ? "somewhere past 1am, again." : "somewhere past 1am"}
+                </p>
+            </button>
 
             {/* desk + lamp */}
             <div className="absolute bottom-0 right-[4%] h-[30%] w-[34%] min-w-[260px]">
@@ -125,17 +159,39 @@ export default function LittleWorld({ onVisit, onNext }) {
                         animation: "breathe 6s ease-in-out infinite, lampHum 11s linear infinite",
                     }}
                 />
-                <svg viewBox="0 0 120 140" className="absolute bottom-[20%] left-[34%] w-24">
-                    <rect x="56" y="52" width="6" height="70" fill="#181410" />
-                    <ellipse cx="59" cy="126" rx="24" ry="6" fill="#181410" />
-                    <path d="M34 20 h50 l12 36 h-74 z" fill="#241d14" />
-                    <path d="M34 20 h50 l4 12 h-58 z" fill="#2e2517" />
-                    <ellipse cx="59" cy="57" rx="34" ry="5" fill="#d4af37" opacity="0.35" />
-                </svg>
+                <button
+                    data-testid="world-lamp"
+                    onClick={tapLamp}
+                    aria-label="lamp"
+                    className="absolute bottom-[20%] left-[34%]"
+                >
+                    <svg viewBox="0 0 120 140" className="w-24">
+                        <rect x="56" y="52" width="6" height="70" fill="#181410" />
+                        <ellipse cx="59" cy="126" rx="24" ry="6" fill="#181410" />
+                        <path d="M34 20 h50 l12 36 h-74 z" fill="#241d14" />
+                        <path d="M34 20 h50 l4 12 h-58 z" fill="#2e2517" />
+                        <ellipse cx="59" cy="57" rx="34" ry="5" fill="#d4af37" opacity="0.35" />
+                    </svg>
+                </button>
+                <AnimatePresence>
+                    {lampNote && (
+                        <motion.p
+                            initial={{ opacity: 0, y: 6 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0 }}
+                            className="f-hand absolute -top-8 left-[6%] w-44 text-lg leading-tight text-[#f5ecd7]"
+                            data-testid="lamp-memory-note"
+                        >
+                            this light has heard every
+                            <br />
+                            3am conversation.
+                        </motion.p>
+                    )}
+                </AnimatePresence>
                 {/* phone on the desk */}
                 <button
                     data-testid="world-phone"
-                    onClick={() => setPhoneLit((p) => !p)}
+                    onClick={tapPhone}
                     className="absolute bottom-[26%] right-[14%] h-24 w-12 rotate-[8deg] rounded-lg border border-[#f5f2eb]/10 bg-[#101014] shadow-[0_10px_30px_rgba(0,0,0,0.6)]"
                     aria-label="phone"
                 >
@@ -153,19 +209,32 @@ export default function LittleWorld({ onVisit, onNext }) {
                             animation: phoneLit ? "none" : "reelGlow 11s linear infinite",
                         }}
                     >
-                        <span className="f-hand text-[9px] leading-none text-[#f5f2eb]">romantic reels</span>
-                        <svg viewBox="0 0 24 24" className="h-3 w-3">
-                            <path d="M12 20 c-6-4-9-7.5-9-11 a5 5 0 0 1 9-3 a5 5 0 0 1 9 3 c0 3.5-3 7-9 11z" fill="#c76d63" />
-                        </svg>
-                        <span className="f-ui text-[7px] tracking-widest text-[#a1a1a6]">12:47 AM</span>
+                        <span className="f-ui text-[8px] font-medium tracking-wide text-[#f5f2eb]">anushika</span>
+                        <span className="f-hand text-[11px] leading-none text-[#f5f2eb]">sent you a reel ❤️</span>
+                        <span className="f-ui text-[7px] tracking-widest text-[#a1a1a6]">now</span>
                     </span>
                 </button>
+                <AnimatePresence>
+                    {phoneNote && (
+                        <motion.p
+                            initial={{ opacity: 0, y: 6 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0 }}
+                            className="f-hand absolute -top-10 right-[2%] w-44 text-right text-lg leading-tight text-[#f5ecd7]"
+                            data-testid="phone-memory-note"
+                        >
+                            'just one reel,' we said.
+                            <br />
+                            two hours later…
+                        </motion.p>
+                    )}
+                </AnimatePresence>
             </div>
 
             {/* teddy */}
             <div className="absolute bottom-[6%] left-[10%]" data-testid="world-teddy">
-                <button onClick={hug} aria-label="teddy bear" className="relative block">
-                    <svg viewBox="0 0 120 130" className={`w-28 transition-transform duration-700 ${hugged ? "scale-95" : ""}`}>
+                <button onClick={hug} aria-label="teddy bear" className="relative block" data-testid="world-teddy-button">
+                    <svg viewBox="0 0 120 130" className={`anim-breathe-scale w-28 transition-transform duration-700 ${hugged ? "scale-95" : ""}`}>
                         <ellipse cx="60" cy="88" rx="30" ry="34" fill="#2e2620" />
                         <ellipse cx="60" cy="92" rx="17" ry="22" fill="#3a3028" />
                         <circle cx="40" cy="26" r="10" fill="#2e2620" />
@@ -195,25 +264,29 @@ export default function LittleWorld({ onVisit, onNext }) {
                         <motion.span
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            className="f-hand absolute -top-9 left-1/2 w-32 -translate-x-1/2 text-center text-lg text-[#f5ecd7]"
+                            className="f-hand absolute -top-14 left-1/2 w-48 -translate-x-1/2 text-center text-lg leading-tight text-[#f5ecd7]"
                             data-testid="teddy-hugged-message"
                         >
-                            there there.
+                            you baby me like this.
+                            <br />
+                            i pretend to mind.
                         </motion.span>
                     )}
                 </button>
             </div>
 
-            {/* shelf with beating heart */}
+            {/* shelf with our little constellation */}
             <div className="absolute left-[38%] top-[26%] hidden md:block">
                 <div className="h-[3px] w-36 bg-[#181410]" />
-                <svg viewBox="0 0 24 24" className="anim-heartbeat absolute -top-6 left-6 h-5 w-5" style={{ animationDuration: "2.6s" }}>
-                    <path
-                        d="M12 21 c-6.5-4.4-10-8-10-11.8 c0-3 2.3-5.2 5-5.2 c2 0 3.6 1.1 5 3 c1.4-1.9 3-3 5-3 c2.7 0 5 2.2 5 5.2 c0 3.8-3.5 7.4-10 11.8z"
-                        fill="#c76d63"
-                        opacity="0.9"
-                        style={{ filter: "drop-shadow(0 0 6px rgba(199,109,99,0.5))" }}
-                    />
+                <svg
+                    viewBox="0 0 90 34"
+                    className="anim-sway absolute -top-7 left-3 w-20"
+                    style={{ animationDuration: "9s" }}
+                    data-testid="world-constellation"
+                >
+                    <path d="M10 24 Q45 6 80 20" fill="none" stroke="#d4af37" strokeWidth="1.1" strokeDasharray="3 4" opacity="0.65" />
+                    <path d="M10 20 l1.5 3 l3 0.3 l-2.3 2.1 l0.7 3 l-2.9 -1.6 l-2.9 1.6 l0.7 -3 l-2.3 -2.1 l3 -0.3 z" fill="none" stroke="#f5ecd7" strokeWidth="1.1" />
+                    <path d="M80 16 l1.5 3 l3 0.3 l-2.3 2.1 l0.7 3 l-2.9 -1.6 l-2.9 1.6 l0.7 -3 l-2.3 -2.1 l3 -0.3 z" fill="none" stroke="#f5ecd7" strokeWidth="1.1" />
                 </svg>
             </div>
 

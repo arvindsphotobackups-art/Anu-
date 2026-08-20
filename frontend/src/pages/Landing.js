@@ -2,9 +2,9 @@ import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 
 const HIDDEN_STARS = [
-    { x: 16, y: 20, msg: "you found one. of course you did." },
-    { x: 74, y: 13, msg: "this one's ours." },
-    { x: 52, y: 33, msg: "look up more often. i hide things here." },
+    { x: 16, y: 20, msg: "she had a crush. he had absolutely no clue. 💀" },
+    { x: 74, y: 13, msg: "still my favourite notification." },
+    { x: 52, y: 33, msg: "somehow you made annoying me your full-time job." },
 ];
 
 const line = {
@@ -19,6 +19,7 @@ const line = {
 export default function Landing({ onEnter }) {
     const [mouse, setMouse] = useState({ x: 0, y: 0 });
     const [starMsg, setStarMsg] = useState(null);
+    const [starHint, setStarHint] = useState(true);
     const [heartTapped, setHeartTapped] = useState(false);
     const [heartMsg, setHeartMsg] = useState(false);
     const [nearCouple, setNearCouple] = useState(false);
@@ -103,7 +104,10 @@ export default function Landing({ onEnter }) {
                 <div key={i} className="absolute z-20" style={{ left: `${s.x}%`, top: `${s.y}%` }}>
                     <button
                         data-testid={`hidden-star-${i + 1}`}
-                        onClick={() => setStarMsg(starMsg === i ? null : i)}
+                        onClick={() => {
+                            setStarMsg(starMsg === i ? null : i);
+                            setStarHint(false);
+                        }}
                         aria-label="a special star"
                         className="anim-twinkle block h-2.5 w-2.5 rounded-full bg-[#f5ecd7]"
                         style={{
@@ -319,6 +323,19 @@ export default function Landing({ onEnter }) {
                     AND A LOT OF LOVE.
                 </motion.p>
             </div>
+
+            {/* discovery hint */}
+            {starHint && (
+                <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 6, duration: 2.2 }}
+                    className="f-hand absolute bottom-24 left-1/2 z-30 -translate-x-1/2 text-lg text-[#a1a1a6]/75"
+                    data-testid="star-discovery-hint"
+                >
+                    there are a few things hiding in the stars.
+                </motion.p>
+            )}
 
             {/* enter */}
             <motion.div
