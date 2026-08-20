@@ -5,6 +5,8 @@ const HIDDEN_STARS = [
     { x: 16, y: 20, msg: "she had a crush. he had absolutely no clue. 💀" },
     { x: 74, y: 13, msg: "still my favourite notification." },
     { x: 52, y: 33, msg: "somehow you made annoying me your full-time job." },
+    { x: 34, y: 10, msg: "you really thought i wouldn't notice that smile?" },
+    { x: 20, y: 62, msg: "plot twist: the annoying girl became my favourite person." },
 ];
 
 const line = {
@@ -120,7 +122,7 @@ export default function Landing({ onEnter }) {
                         <motion.p
                             initial={{ opacity: 0, y: 6 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="f-hand absolute left-4 top-2 w-44 text-lg leading-tight text-[#f5ecd7]"
+                            className={`f-hand absolute top-2 w-44 text-lg leading-tight text-[#f5ecd7] ${s.x > 70 ? "right-4 text-right" : "left-4"}`}
                             data-testid={`hidden-star-message-${i + 1}`}
                         >
                             {s.msg}

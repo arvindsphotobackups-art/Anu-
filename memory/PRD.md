@@ -15,6 +15,13 @@ Build a FRONTEND-ONLY interactive romantic story website (personal gift). No bac
 - The gift recipient (her): explores chapters sequentially, discovers hidden interactions.
 - The creator (him): edits texts in `src/data/*` and swaps placeholder images.
 
+## Implemented (2026-08-21, iteration 5 — living Page 3 + star rotation + responsiveness)
+- Hidden stars: landing now has 5 with personal witty notes (incl. "plot twist: the annoying girl became my favourite person."), memories refreshed with 3 relationship-specific notes; messages auto-align so they never clip offscreen.
+- Page 3 rebuilt behaviorally (layout untouched): all five objects are discoverable memories — teddy hug → "I miss your childish little moments…", phone → staged mini chat sequence then "One reel. One reply. Then somehow two hours disappeared.", clock → real ticking second hand, hands spin then settle at ~1am + "those nights when we somehow always had one more thing to talk about.", window → "We could turn an ordinary evening into a whole little world.", lamp → "You made even doing nothing feel like something."
+- Ambient life: dust motes drift through the room; on load the phone lights once to teach interactivity; discovered objects keep a tiny golden sparkle mark.
+- Final moment: after all 5 discovered, the room settles, then "Maybe I don't miss the big things." → "I miss the little ones." → continue link appears (replaces the old timed link).
+- Verified desktop + mobile (390px) for Pages 1 and 3; fixed a star whose message overlapped the mobile title.
+
 ## Implemented (2026-08-21, iteration 4 — behavioral refinements)
 - Landing: star messages replaced with relationship-specific witty notes; added tiny handwritten discovery hint that vanishes after the first star click.
 - Little World: teddy idle-breathes + hug message about babying; phone shows "anushika sent you a reel ❤️" notification + click reveals reels memory; lamp click reveals 3am-conversation memory; clock clickable — hands swing to ~1am with "somewhere past 1am, again."; pink heart decoration replaced by a two-stars-and-thread constellation motif.

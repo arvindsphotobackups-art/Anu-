@@ -1,41 +1,112 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+
+const OBJECTS = ["teddy", "phone", "clock", "window", "lamp"];
+
+const MOTES = Array.from({ length: 10 }, (_, i) => ({
+    left: `${8 + ((i * 29) % 84)}%`,
+    top: `${18 + ((i * 37) % 58)}%`,
+    size: 1.5 + ((i * 5) % 3) * 0.6,
+    delay: (i * 2.1) % 10,
+    dur: 12 + ((i * 3) % 7),
+}));
+
+const FoundMark = ({ className = "" }) => (
+    <motion.span
+        initial={{ opacity: 0, scale: 0 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        className={`pointer-events-none absolute z-20 ${className}`}
+    >
+        <svg viewBox="0 0 24 24" className="h-3 w-3" style={{ filter: "drop-shadow(0 0 5px rgba(212,175,55,0.75))" }}>
+            <path d="M12 3 l1.8 5.7 l5.7 1.8 l-5.7 1.8 l-1.8 5.7 l-1.8 -5.7 l-5.7 -1.8 l5.7 -1.8 z" fill="#d4af37" />
+        </svg>
+    </motion.span>
+);
 
 export default function LittleWorld({ onVisit, onNext }) {
     const [hugged, setHugged] = useState(false);
     const [phoneLit, setPhoneLit] = useState(false);
-    const [phoneNote, setPhoneNote] = useState(false);
+    const [phoneStage, setPhoneStage] = useState(-1);
+    const [clockPhase, setClockPhase] = useState("idle");
+    const [windowNote, setWindowNote] = useState(false);
     const [lampNote, setLampNote] = useState(false);
-    const [clockTap, setClockTap] = useState(false);
-    const [ready, setReady] = useState(false);
+    const [found, setFound] = useState([]);
+    const [finalStage, setFinalStage] = useState(0);
+    const timers = useRef([]);
+
+    const later = (fn, ms) => {
+        timers.current.push(setTimeout(fn, ms));
+    };
 
     useEffect(() => {
         onVisit();
-        const t = setTimeout(() => setReady(true), 6000);
-        return () => clearTimeout(t);
+        // one object quietly draws attention to itself
+        later(() => setPhoneLit(true), 3200);
+        later(() => setPhoneLit(false), 7800);
+        return () => timers.current.forEach(clearTimeout);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const discover = (id) => setFound((f) => (f.includes(id) ? f : [...f, id]));
+
+    useEffect(() => {
+        if (found.length === OBJECTS.length && finalStage === 0) {
+            later(() => setFinalStage(1), 2600);
+            later(() => setFinalStage(2), 6400);
+            later(() => setFinalStage(3), 10300);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [found]);
+
     const hug = () => {
+        discover("teddy");
         setHugged(true);
-        setTimeout(() => setHugged(false), 3500);
+        later(() => setHugged(false), 7000);
     };
 
     const tapPhone = () => {
-        setPhoneLit((p) => !p);
-        setPhoneNote(true);
-        setTimeout(() => setPhoneNote(false), 4500);
-    };
-
-    const tapLamp = () => {
-        setLampNote(true);
-        setTimeout(() => setLampNote(false), 4500);
+        discover("phone");
+        if (phoneStage >= 0) return;
+        setPhoneLit(true);
+        setPhoneStage(0);
+        later(() => setPhoneStage(1), 1700);
+        later(() => setPhoneStage(2), 3400);
+        later(() => setPhoneStage(3), 5100);
+        later(() => {
+            setPhoneStage(-1);
+            setPhoneLit(false);
+        }, 11500);
     };
 
     const tapClock = () => {
-        setClockTap(true);
-        setTimeout(() => setClockTap(false), 5000);
+        discover("clock");
+        if (clockPhase !== "idle") return;
+        setClockPhase("spin");
+        later(() => setClockPhase("settled"), 1800);
+        later(() => setClockPhase("idle"), 9500);
     };
+
+    const tapWindow = () => {
+        discover("window");
+        setWindowNote(true);
+        later(() => setWindowNote(false), 6000);
+    };
+
+    const tapLamp = () => {
+        discover("lamp");
+        setLampNote(true);
+        later(() => setLampNote(false), 6000);
+    };
+
+    const handStyle = (idleAnim, settleDeg) =>
+        clockPhase === "spin"
+            ? { animation: "spin 0.7s linear infinite" }
+            : clockPhase === "settled"
+              ? { transform: `translateX(-50%) rotate(${settleDeg}deg)`, transition: "transform 1.2s ease" }
+              : { animation: idleAnim };
+
+    const phoneIdle = phoneStage === -1 && !phoneLit;
 
     return (
         <div
@@ -55,8 +126,33 @@ export default function LittleWorld({ onVisit, onNext }) {
                 }}
             />
 
+            {/* dust drifting through the room */}
+            <div className="pointer-events-none absolute inset-0">
+                {MOTES.map((m, i) => (
+                    <span
+                        key={i}
+                        className="anim-mote absolute rounded-full bg-[#d4af37]"
+                        style={{
+                            left: m.left,
+                            top: m.top,
+                            width: m.size,
+                            height: m.size,
+                            animationDelay: `${m.delay}s`,
+                            animationDuration: `${m.dur}s`,
+                        }}
+                    />
+                ))}
+            </div>
+
             {/* window + moon + curtains */}
-            <div className="absolute left-[7%] top-[12%] h-[44%] w-[26%] min-w-[200px]">
+            <div
+                className="absolute left-[7%] top-[12%] h-[44%] w-[26%] min-w-[200px] cursor-pointer"
+                onClick={tapWindow}
+                data-testid="world-window"
+                role="button"
+                aria-label="window"
+            >
+                {found.includes("window") && <FoundMark className="-right-2 -top-3" />}
                 <div className="relative h-full w-full overflow-hidden border-[6px] border-[#060609] bg-[#070b16]">
                     <div
                         className="absolute right-[18%] top-[14%] h-12 w-12 rounded-full"
@@ -106,6 +202,22 @@ export default function LittleWorld({ onVisit, onNext }) {
                 </div>
                 <div className="mx-auto h-2 w-[110%] -translate-x-[5%] bg-[#060609]" />
             </div>
+            <AnimatePresence>
+                {windowNote && (
+                    <motion.p
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 1 }}
+                        className="f-hand absolute left-[9%] top-[59%] z-20 w-60 text-xl leading-snug text-[#f5ecd7]"
+                        data-testid="window-memory-note"
+                    >
+                        "We could turn an ordinary evening
+                        <br />
+                        into a whole little world."
+                    </motion.p>
+                )}
+            </AnimatePresence>
 
             {/* clock */}
             <button
@@ -114,6 +226,7 @@ export default function LittleWorld({ onVisit, onNext }) {
                 onClick={tapClock}
                 aria-label="clock"
             >
+                {found.includes("clock") && <FoundMark className="-left-6 top-0" />}
                 <div className="relative h-24 w-24 rounded-full border-2 border-[#f5f2eb]/15 bg-[#0a0a0e]">
                     {[...Array(12)].map((_, i) => (
                         <span
@@ -127,25 +240,37 @@ export default function LittleWorld({ onVisit, onNext }) {
                     ))}
                     <span
                         className="absolute bottom-1/2 left-1/2 h-7 w-[3px] origin-bottom rounded bg-[#f5f2eb]/70"
-                        style={
-                            clockTap
-                                ? { transform: "translateX(-50%) rotate(32deg)", transition: "transform 1.4s ease" }
-                                : { animation: "spin 240s linear infinite" }
-                        }
+                        style={handStyle("spin 240s linear infinite", 32)}
                     />
                     <span
                         className="absolute bottom-1/2 left-1/2 h-10 w-[2px] origin-bottom rounded bg-[#d4af37]/80"
-                        style={
-                            clockTap
-                                ? { transform: "translateX(-50%) rotate(4deg)", transition: "transform 1.4s ease" }
-                                : { animation: "spin 24s linear infinite" }
-                        }
+                        style={handStyle("spin 24s linear infinite", 4)}
+                    />
+                    <span
+                        className="absolute bottom-1/2 left-1/2 h-10 w-[1px] origin-bottom rounded bg-[#f5f2eb]/45"
+                        style={handStyle("spin 60s steps(60) infinite", 186)}
                     />
                     <span className="absolute left-1/2 top-1/2 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#f5f2eb]" />
                 </div>
                 <p className="f-hand mt-2 text-lg text-[#a1a1a6]" data-testid="clock-caption">
-                    {clockTap ? "somewhere past 1am, again." : "somewhere past 1am"}
+                    {clockPhase === "idle" ? "somewhere past 1am" : "somewhere past 1am, again."}
                 </p>
+                <AnimatePresence>
+                    {clockPhase === "settled" && (
+                        <motion.p
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 1 }}
+                            className="f-hand mt-1 w-56 text-center text-base leading-tight text-[#a1a1a6]/80"
+                            data-testid="clock-memory-note"
+                        >
+                            those nights when we somehow always
+                            <br />
+                            had one more thing to talk about.
+                        </motion.p>
+                    )}
+                </AnimatePresence>
             </button>
 
             {/* desk + lamp */}
@@ -165,6 +290,7 @@ export default function LittleWorld({ onVisit, onNext }) {
                     aria-label="lamp"
                     className="absolute bottom-[20%] left-[34%]"
                 >
+                    {found.includes("lamp") && <FoundMark className="-left-3 -top-6" />}
                     <svg viewBox="0 0 120 140" className="w-24">
                         <rect x="56" y="52" width="6" height="70" fill="#181410" />
                         <ellipse cx="59" cy="126" rx="24" ry="6" fill="#181410" />
@@ -179,15 +305,17 @@ export default function LittleWorld({ onVisit, onNext }) {
                             initial={{ opacity: 0, y: 6 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0 }}
-                            className="f-hand absolute -top-8 left-[6%] w-44 text-lg leading-tight text-[#f5ecd7]"
+                            transition={{ duration: 1 }}
+                            className="f-hand absolute -top-10 left-[2%] w-52 text-xl leading-snug text-[#f5ecd7]"
                             data-testid="lamp-memory-note"
                         >
-                            this light has heard every
+                            "You made even doing nothing
                             <br />
-                            3am conversation.
+                            feel like something."
                         </motion.p>
                     )}
                 </AnimatePresence>
+
                 {/* phone on the desk */}
                 <button
                     data-testid="world-phone"
@@ -195,18 +323,19 @@ export default function LittleWorld({ onVisit, onNext }) {
                     className="absolute bottom-[26%] right-[14%] h-24 w-12 rotate-[8deg] rounded-lg border border-[#f5f2eb]/10 bg-[#101014] shadow-[0_10px_30px_rgba(0,0,0,0.6)]"
                     aria-label="phone"
                 >
+                    {found.includes("phone") && <FoundMark className="-left-5 -top-3" />}
                     <span
                         className="absolute inset-1 rounded-md bg-[#1a2030]"
                         style={{
-                            opacity: phoneLit ? 0.95 : undefined,
-                            animation: phoneLit ? "none" : "screenGlow 11s linear infinite",
+                            opacity: phoneIdle ? undefined : 0.95,
+                            animation: phoneIdle ? "screenGlow 11s linear infinite" : "none",
                         }}
                     />
                     <span
                         className="absolute inset-2 flex flex-col items-center justify-center gap-1 rounded"
                         style={{
-                            opacity: phoneLit ? 1 : undefined,
-                            animation: phoneLit ? "none" : "reelGlow 11s linear infinite",
+                            opacity: phoneIdle ? undefined : 1,
+                            animation: phoneIdle ? "reelGlow 11s linear infinite" : "none",
                         }}
                     >
                         <span className="f-ui text-[8px] font-medium tracking-wide text-[#f5f2eb]">anushika</span>
@@ -214,18 +343,56 @@ export default function LittleWorld({ onVisit, onNext }) {
                         <span className="f-ui text-[7px] tracking-widest text-[#a1a1a6]">now</span>
                     </span>
                 </button>
+
+                {/* tiny chat sequence, then the memory */}
                 <AnimatePresence>
-                    {phoneNote && (
+                    {phoneStage >= 0 && phoneStage < 3 && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -6 }}
+                            transition={{ duration: 0.7 }}
+                            className="absolute bottom-[78%] right-[4%] z-20 w-48 space-y-2"
+                            data-testid="phone-chat-sequence"
+                        >
+                            <div className="rounded-lg border border-[#f5f2eb]/12 bg-[#12141c]/95 px-3 py-2">
+                                <p className="f-ui text-[10px] font-semibold tracking-wide text-[#f5f2eb]">anushika ❤️</p>
+                                <p className="f-hand text-base leading-tight text-[#f5f2eb]/90">sent you a reel</p>
+                            </div>
+                            {phoneStage >= 1 && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 8 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="ml-8 rounded-lg border border-[#f5f2eb]/12 bg-[#1a2030]/95 px-3 py-2"
+                                >
+                                    <p className="f-hand text-base leading-tight text-[#f5f2eb]/90">you: okay. LAST one.</p>
+                                </motion.div>
+                            )}
+                            {phoneStage >= 2 && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 8 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="rounded-lg border border-[#f5f2eb]/12 bg-[#12141c]/95 px-3 py-2"
+                                >
+                                    <p className="f-hand text-base leading-tight text-[#f5f2eb]/90">
+                                        anushika: you said that 12 reels ago
+                                    </p>
+                                </motion.div>
+                            )}
+                        </motion.div>
+                    )}
+                    {phoneStage === 3 && (
                         <motion.p
-                            initial={{ opacity: 0, y: 6 }}
+                            initial={{ opacity: 0, y: 8 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0 }}
-                            className="f-hand absolute -top-10 right-[2%] w-44 text-right text-lg leading-tight text-[#f5ecd7]"
+                            transition={{ duration: 1 }}
+                            className="f-hand absolute bottom-[78%] right-[4%] z-20 w-52 text-xl leading-snug text-[#f5ecd7]"
                             data-testid="phone-memory-note"
                         >
-                            'just one reel,' we said.
+                            "One reel. One reply.
                             <br />
-                            two hours later…
+                            Then somehow two hours disappeared."
                         </motion.p>
                     )}
                 </AnimatePresence>
@@ -234,6 +401,7 @@ export default function LittleWorld({ onVisit, onNext }) {
             {/* teddy */}
             <div className="absolute bottom-[6%] left-[10%]" data-testid="world-teddy">
                 <button onClick={hug} aria-label="teddy bear" className="relative block" data-testid="world-teddy-button">
+                    {found.includes("teddy") && <FoundMark className="-right-6 -top-3" />}
                     <svg viewBox="0 0 120 130" className={`anim-breathe-scale w-28 transition-transform duration-700 ${hugged ? "scale-95" : ""}`}>
                         <ellipse cx="60" cy="88" rx="30" ry="34" fill="#2e2620" />
                         <ellipse cx="60" cy="92" rx="17" ry="22" fill="#3a3028" />
@@ -264,12 +432,15 @@ export default function LittleWorld({ onVisit, onNext }) {
                         <motion.span
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            className="f-hand absolute -top-14 left-1/2 w-48 -translate-x-1/2 text-center text-lg leading-tight text-[#f5ecd7]"
+                            transition={{ delay: 0.9, duration: 1.1 }}
+                            className="f-hand absolute -top-24 left-1/2 w-60 -translate-x-1/2 text-center text-lg leading-snug text-[#f5ecd7]"
                             data-testid="teddy-hugged-message"
                         >
-                            you baby me like this.
+                            "I miss your childish little moments.
                             <br />
-                            i pretend to mind.
+                            The way you'd baby me.
+                            <br />
+                            The version of you that made everything softer."
                         </motion.span>
                     )}
                 </button>
@@ -314,19 +485,45 @@ export default function LittleWorld({ onVisit, onNext }) {
                 >
                     (look around. it's all still here.)
                 </motion.p>
+                <AnimatePresence>
+                    {finalStage >= 1 && (
+                        <motion.p
+                            key="final1"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 1.8 }}
+                            className="f-hand mt-10 text-2xl text-[#f5ecd7]"
+                            data-testid="world-final-line-1"
+                        >
+                            "Maybe I don't miss the big things."
+                        </motion.p>
+                    )}
+                    {finalStage >= 2 && (
+                        <motion.p
+                            key="final2"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 2 }}
+                            className="f-hand mt-2 text-2xl text-[#f5ecd7]"
+                            data-testid="world-final-line-2"
+                        >
+                            "I miss the little ones."
+                        </motion.p>
+                    )}
+                </AnimatePresence>
             </div>
 
             {/* continue */}
             <motion.div
                 initial={{ opacity: 0 }}
-                animate={{ opacity: ready ? 1 : 0 }}
-                transition={{ duration: 1.5 }}
+                animate={{ opacity: finalStage >= 3 ? 1 : 0 }}
+                transition={{ duration: 1.8 }}
                 className="absolute bottom-8 left-1/2 z-20 -translate-x-1/2"
             >
                 <button
                     data-testid="world-next-chapter"
                     onClick={onNext}
-                    className={`f-ui text-xs tracking-[0.35em] text-[#a1a1a6] underline decoration-[#d4af37]/30 underline-offset-8 transition-colors duration-500 hover:text-[#f5ecd7] ${ready ? "" : "pointer-events-none"}`}
+                    className={`f-ui text-xs tracking-[0.35em] text-[#a1a1a6] underline decoration-[#d4af37]/30 underline-offset-8 transition-colors duration-500 hover:text-[#f5ecd7] ${finalStage >= 3 ? "" : "pointer-events-none"}`}
                 >
                     THE THINGS I SHOULD HAVE DONE BETTER →
                 </button>

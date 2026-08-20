@@ -2,9 +2,9 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const HIDDEN = [
-    { x: "88%", y: "6%", msg: "you look for stars everywhere now. good." },
+    { x: "88%", y: "6%", msg: "you + me + a late-night call = tomorrow's sleep schedule destroyed." },
     { x: "3%", y: "58%", msg: "this one remembers the first hello." },
-    { x: "55%", y: "88%", msg: "okay, you definitely deserve the next chapter." },
+    { x: "55%", y: "88%", msg: "remember when our 'just one reel' became two hours of talking?" },
 ];
 
 const Tape = ({ className = "", style }) => (
@@ -68,7 +68,7 @@ export default function Memories({ discovered, onDiscover, onNext }) {
                         <motion.p
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            className="f-hand absolute right-4 top-3 w-44 text-lg leading-tight text-[#f5ecd7]"
+                            className={`f-hand absolute top-3 w-44 text-lg leading-tight text-[#f5ecd7] ${parseInt(s.x) > 50 ? "right-4 text-right" : "left-4"}`}
                         >
                             {s.msg}
                         </motion.p>
