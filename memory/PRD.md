@@ -15,6 +15,10 @@ Build a FRONTEND-ONLY interactive romantic story website (personal gift). No bac
 - The gift recipient (her): explores chapters sequentially, discovers hidden interactions.
 - The creator (him): edits texts in `src/data/*` and swaps placeholder images.
 
+## Implemented (2026-08-21, iteration 7 — environmental comic + more landing stars)
+- Landing: 9 hidden stars total, including "i love u kuttu 😗", "en asa kothamalliye 😙", "eyyy kuttachi", "en thangamiluuu".
+- Comic rebuilt as an animated graphic-novel scrapbook (style unchanged): 10 story scenes with real environments — library (shelves, two tables, friends, she walks over, sequential bubbles), first message (night bedroom, chat card, sweat drop), first call (split bedrooms, ringing phone, connection thread), KitKat/reels (bench + tree, chat, floating hearts), Saleel jealousy ("totally not jealous." + storm cloud), New Year broken phone (night road, falling phone, cracked screen with two working lines), quiet semester (calendar, silent phone, empty chat), Wonderla (coaster + flags + crowd, moving car, "MURUGAAAA!!", hand-around-two-fingers inset), girls' room (string lights, friends, lap moment), confession (moonlit bench, they drift closer). Scene-specific motion: trembling, bobs, walking, coaster run, ring pulses. New file: `src/components/comic/Scenes.js`; crowd figures via MiniPerson.
+
 ## Implemented (2026-08-21, iteration 6 — constellation finale + mobile assembly polish)
 - Page 3: when all five objects are discovered, their golden sparkles connect into a hand-drawn dotted constellation that draws itself across the room before the closing lines.
 - Final chapter on phones: the composition becomes a tall scrollable "final page" — centered headline, photo beneath, all fragments in two readable columns with mobile-specific positions; coda and END float fixed over the viewport regardless of scroll. Fixed framer/tailwind transform conflicts that clipped centered text, widened fragments, and removed right-edge clipping.

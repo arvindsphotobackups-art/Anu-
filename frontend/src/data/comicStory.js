@@ -4,71 +4,73 @@ export const SLIDES = [
         caption: ["drawn from memory,", "with very shaky hands."],
     },
     {
-        kicker: "first year",
+        kicker: "first year — the library",
         caption: [
-            "First year of college.",
-            "She noticed him long before",
-            "he had any idea she existed.",
+            "Truth or dare with her friends.",
+            "One dare that changed everything.",
         ],
     },
     {
-        kicker: "the library",
-        caption: [
-            "Truth or dare in the library.",
-            "Her friends dared her to talk to him.",
-        ],
-    },
-    {
-        kicker: "his smooth reply",
-        caption: [
-            "His reply? A Vadivelu movie reference.",
-            "Smooth, da. Very smooth.",
-        ],
-    },
-    {
-        kicker: "the message",
+        kicker: "that evening",
         caption: [
             "He panicked. Apologized.",
-            "Explained the movie reference.",
-            "And somehow… they started talking.",
+            "Explained the Vadivelu reference.",
+            "Somehow… they kept talking.",
         ],
     },
     {
-        kicker: "the late nights",
+        kicker: "the first call",
         caption: [
-            "Late-night chats. A first call he was",
-            "too nervous to answer. KitKat. Instagram.",
-            "Reels at 2am. Flirting disguised as jokes.",
+            "He was so nervous",
+            "he almost didn't answer.",
         ],
     },
     {
-        kicker: "the quiet chapter",
+        kicker: "kitkat & 2am reels",
         caption: [
-            "New Year — his phone broke. Two visible lines.",
-            "He kept texting all night anyway.",
-            "Then the holidays came… and the messages stopped.",
+            "They both knew what they were doing.",
+            "Neither of them admitted it.",
+        ],
+    },
+    {
+        kicker: "the saleel chapter",
+        caption: ["totally not jealous.", "(completely jealous.)"],
+    },
+    {
+        kicker: "new year",
+        caption: [
+            "The phone was broken.",
+            "Apparently, that wasn't enough.",
+        ],
+    },
+    {
+        kicker: "the quiet semester",
+        caption: [
+            "The holidays came… and the messages stopped.",
             "She got committed to Saleel.",
-            "He stepped back. It broke him quietly.",
+            "He stepped back. Quietly.",
         ],
     },
     {
-        kicker: "wonderla",
+        kicker: "wonderla — third year IV",
         caption: [
-            "Third year. The college trip.",
             "She was terrified — and held on anyway.",
             "Her whole hand around two of his fingers.",
-            "That night she sat in his lap like a baby.",
+        ],
+    },
+    {
+        kicker: "that night, in the girls' room",
+        caption: [
+            "She sat in his lap like a baby.",
             "He kissed her hand.",
         ],
     },
     {
-        kicker: "the chance",
+        kicker: "the confession",
         caption: [
-            "After the trip, she told him she had feelings.",
-            "Old trauma made it hard to say yes.",
+            "She had feelings. The past made it hard.",
             "He asked her to take the chance.",
-            "She did.",
-            "They fell in love.",
+            "She did. They fell in love.",
         ],
     },
     {

@@ -206,6 +206,39 @@ body {
 .anim-breathe-scale { animation: breatheScale 4.5s ease-in-out infinite; transform-origin: bottom center; }
 .anim-mote { animation: mote 10s linear infinite; }
 
+@keyframes tremble {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-1.5px); }
+    75% { transform: translateX(1.5px); }
+}
+
+@keyframes bobTalk {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-2.5px); }
+}
+
+@keyframes coasterRun {
+    0%, 100% { transform: translateX(0) rotate(-2deg); }
+    50% { transform: translateX(90px) rotate(2deg); }
+}
+
+@keyframes ringPulse {
+    0% { opacity: 0; transform: scale(0.6); }
+    40% { opacity: 0.8; }
+    100% { opacity: 0; transform: scale(1.5); }
+}
+
+@keyframes floatHeart {
+    0%, 100% { transform: translateY(0) rotate(-4deg); opacity: 0.85; }
+    50% { transform: translateY(-8px) rotate(5deg); opacity: 1; }
+}
+
+.anim-tremble { animation: tremble 0.5s ease-in-out infinite; }
+.anim-bob { animation: bobTalk 2.2s ease-in-out infinite; }
+.anim-coaster { animation: coasterRun 5s ease-in-out infinite; }
+.anim-ring { animation: ringPulse 1.2s ease-out infinite; }
+.anim-float-heart { animation: floatHeart 3.4s ease-in-out infinite; }
+
 @media (prefers-reduced-motion: reduce) {
     .anim-twinkle, .anim-heartbeat, .anim-breathe, .anim-sway,
     .anim-flicker, .grain, .eq-bar, .fragment-float, .anim-breathe-scale, .anim-mote {

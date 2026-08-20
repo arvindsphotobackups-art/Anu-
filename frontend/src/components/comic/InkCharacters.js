@@ -243,3 +243,18 @@ export const InkDoodle = ({ kind = "heart", className = "", style }) => {
         </svg>
     );
 };
+
+export const MiniPerson = ({ className = "", style, flip = false }) => (
+    <svg
+        viewBox="0 0 40 60"
+        className={className}
+        style={{ ...(flip ? { transform: "scaleX(-1)" } : {}), ...style }}
+        aria-label="someone"
+    >
+        <g filter="url(#inkRough)" stroke={INK} strokeWidth="2.4" strokeLinecap="round" fill="none">
+            <circle cx="20" cy="14" r="9" fill={PAPER} />
+            <path d="M11 14 q0 -9 9 -9 q9 0 9 9 q-4 -5 -9 -5 q-5 0 -9 5 z" fill={INK} stroke="none" />
+            <path d="M10 27 q10 -6 20 0 l4 25 q-14 5 -28 0 z" fill={PAPER} />
+        </g>
+    </svg>
+);

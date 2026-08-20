@@ -7,6 +7,10 @@ const HIDDEN_STARS = [
     { x: 52, y: 33, msg: "somehow you made annoying me your full-time job." },
     { x: 34, y: 10, msg: "you really thought i wouldn't notice that smile?" },
     { x: 20, y: 62, msg: "plot twist: the annoying girl became my favourite person." },
+    { x: 62, y: 16, msg: "i love u kuttu 😗" },
+    { x: 8, y: 38, msg: "en asa kothamalliye 😙" },
+    { x: 90, y: 26, msg: "eyyy kuttachi" },
+    { x: 8, y: 48, msg: "en thangamiluuu" },
 ];
 
 const line = {
