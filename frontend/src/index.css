@@ -122,14 +122,89 @@ body {
 }
 
 @keyframes reelGlow {
-    0%, 78%, 100% { opacity: 0; }
-    83%, 94% { opacity: 1; }
+    0%, 72%, 100% { opacity: 0; }
+    75%, 79% { opacity: 1; }
+    81%, 84% { opacity: 0; }
+    86%, 89% { opacity: 0.5; }
+    91% { opacity: 0; }
 }
 
 @keyframes screenGlow {
-    0%, 78%, 100% { opacity: 0; }
-    83%, 94% { opacity: 0.9; }
+    0%, 72%, 100% { opacity: 0; }
+    75%, 79% { opacity: 0.9; }
+    81%, 84% { opacity: 0; }
+    86%, 89% { opacity: 0.4; }
+    91% { opacity: 0; }
 }
+
+@keyframes swayCalm {
+    0%, 100% { transform: rotate(1.1deg); }
+    22% { transform: rotate(-0.6deg); }
+    47% { transform: rotate(1.7deg); }
+    71% { transform: rotate(-1.3deg); }
+}
+
+@keyframes carLight {
+    0% { transform: translateX(-40px); opacity: 0; }
+    2% { opacity: 0.5; }
+    7% { transform: translateX(300px); opacity: 0; }
+    100% { transform: translateX(300px); opacity: 0; }
+}
+
+@keyframes lampWash {
+    0%, 100% { opacity: 0.5; }
+    18% { opacity: 0.68; }
+    39% { opacity: 0.42; }
+    63% { opacity: 0.72; }
+    84% { opacity: 0.5; }
+}
+
+@keyframes clockHalo {
+    0%, 100% { opacity: 0.3; }
+    27% { opacity: 0.52; }
+    52% { opacity: 0.26; }
+    76% { opacity: 0.46; }
+}
+
+@keyframes teddyIdle {
+    0%, 100% { transform: rotate(0deg) translateY(0); }
+    31% { transform: rotate(0.7deg); }
+    36% { transform: rotate(0.7deg) translateY(-1px); }
+    58% { transform: rotate(-0.5deg); }
+    82% { transform: rotate(0.3deg); }
+}
+
+@keyframes earTwitch {
+    0%, 88%, 100% { transform: rotate(0deg); }
+    91% { transform: rotate(9deg); }
+    94% { transform: rotate(-3deg); }
+}
+
+@keyframes roomBreath {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 0.85; }
+}
+
+@keyframes phoneCast {
+    0%, 72%, 100% { opacity: 0; }
+    75%, 79% { opacity: 0.5; }
+    81%, 84% { opacity: 0; }
+    86%, 89% { opacity: 0.25; }
+    91% { opacity: 0; }
+}
+
+.anim-sway-calm { animation: swayCalm 15s ease-in-out infinite; transform-origin: top center; }
+.anim-car-light { animation: carLight 38s linear infinite; }
+.anim-teddy-idle { animation: teddyIdle 9s ease-in-out infinite; transform-origin: bottom center; }
+.anim-ear { animation: earTwitch 12s ease-in-out infinite; transform-box: fill-box; transform-origin: bottom center; }
+.anim-room-breath { animation: roomBreath 26s ease-in-out infinite; }
+
+@keyframes revealRoom {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+.anim-reveal-room { animation: revealRoom 4.2s ease 0.5s both; }
 
 @keyframes fadeUp {
     from { opacity: 0; transform: translateY(22px); }
@@ -258,7 +333,8 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
     .anim-twinkle, .anim-heartbeat, .anim-breathe, .anim-sway,
-    .anim-flicker, .grain, .eq-bar, .fragment-float, .anim-breathe-scale, .anim-mote {
+    .anim-flicker, .grain, .eq-bar, .fragment-float, .anim-breathe-scale, .anim-mote,
+    .anim-sway-calm, .anim-car-light, .anim-teddy-idle, .anim-ear, .anim-room-breath {
         animation: none !important;
     }
 }

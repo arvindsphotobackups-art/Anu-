@@ -34,6 +34,7 @@ export default function LittleWorld({ onVisit, onNext }) {
     const [found, setFound] = useState([]);
     const [finalStage, setFinalStage] = useState(0);
     const [activeId, setActiveId] = useState(null);
+    const [mouse, setMouse] = useState({ x: 0, y: 0 });
     const timers = useRef([]);
 
     const later = (fn, ms) => {
@@ -43,11 +44,25 @@ export default function LittleWorld({ onVisit, onNext }) {
     const play = (id) => ({ animationPlayState: activeId === id ? "paused" : "running" });
     const release = (id) => setActiveId((cur) => (cur === id ? null : cur));
 
+    // near-imperceptible depth between the layers of the room
+    const par = (fx, fy) => ({
+        transform: `translate3d(${(mouse.x * fx).toFixed(1)}px, ${(mouse.y * fy).toFixed(1)}px, 0)`,
+        transition: "transform 1.4s cubic-bezier(0.22, 1, 0.36, 1)",
+    });
+
+    const onMove = (e) => {
+        const r = e.currentTarget.getBoundingClientRect();
+        setMouse({
+            x: (e.clientX - r.left) / r.width - 0.5,
+            y: (e.clientY - r.top) / r.height - 0.5,
+        });
+    };
+
     useEffect(() => {
         onVisit();
-        // one object quietly draws attention to itself
-        later(() => setPhoneLit(true), 3200);
-        later(() => setPhoneLit(false), 7800);
+        // the room settles into its nighttime state, then small things begin
+        later(() => setPhoneLit(true), 4600);
+        later(() => setPhoneLit(false), 9200);
         return () => timers.current.forEach(clearTimeout);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -133,6 +148,7 @@ export default function LittleWorld({ onVisit, onNext }) {
     return (
         <div
             data-testid="little-world-page"
+            onMouseMove={onMove}
             className="relative h-screen w-full overflow-hidden"
             style={{
                 background:
@@ -143,13 +159,24 @@ export default function LittleWorld({ onVisit, onNext }) {
             <div
                 className="absolute inset-0"
                 style={{
+                    ...par(2, 1),
                     background:
                         "radial-gradient(ellipse 60% 50% at 78% 70%, rgba(212,175,55,0.06), rgba(3,3,5,0) 70%), radial-gradient(ellipse 45% 55% at 18% 35%, rgba(120,140,190,0.07), rgba(3,3,5,0) 70%)",
                 }}
             />
 
+            {/* the whole room breathing, almost imperceptibly */}
+            <div
+                className="anim-room-breath pointer-events-none absolute inset-0"
+                style={{
+                    ...par(2, 1),
+                    background:
+                        "radial-gradient(ellipse 70% 60% at 60% 62%, rgba(212,175,55,0.05) 0%, rgba(3,3,5,0) 70%)",
+                }}
+            />
+
             {/* dust drifting through the room */}
-            <div className="pointer-events-none absolute inset-0">
+            <div className="pointer-events-none absolute inset-0" style={par(14, 9)}>
                 {MOTES.map((m, i) => (
                     <span
                         key={i}
@@ -166,6 +193,17 @@ export default function LittleWorld({ onVisit, onNext }) {
                 ))}
             </div>
 
+            {/* moonlight spilling onto the wall beside the window */}
+            <div
+                className="pointer-events-none absolute left-[33%] top-[16%] h-[52%] w-[16%]"
+                style={{
+                    background:
+                        "linear-gradient(100deg, rgba(245,242,235,0.05) 0%, rgba(245,242,235,0) 70%)",
+                    animation: "moonbeam 24s ease-in-out infinite",
+                    ...play("window"),
+                }}
+            />
+
             {/* window + moon + curtains */}
             <div
                 className="absolute left-[7%] top-[12%] h-[44%] w-[26%] min-w-[200px] cursor-pointer"
@@ -173,6 +211,7 @@ export default function LittleWorld({ onVisit, onNext }) {
                 data-testid="world-window"
                 role="button"
                 aria-label="window"
+                style={par(5, 3)}
             >
                 {found.includes("window") && <FoundMark className="-right-2 -top-3" />}
                 <div className="relative h-full w-full overflow-hidden border-[6px] border-[#060609] bg-[#070b16]">
@@ -182,7 +221,7 @@ export default function LittleWorld({ onVisit, onNext }) {
                             background: "#f5f2eb",
                             opacity: 0.85,
                             boxShadow: "0 0 40px 12px rgba(245,242,235,0.18)",
-                            animation: "moonbeam 14s ease-in-out infinite",
+                            animation: "moonbeam 17s ease-in-out infinite",
                             ...play("window"),
                         }}
                     />
@@ -190,6 +229,17 @@ export default function LittleWorld({ onVisit, onNext }) {
                     <div
                         className="anim-cloud absolute top-[16%] h-7 w-24 rounded-full bg-[#0b101e]/80 blur-[3px]"
                         style={play("window")}
+                    />
+                    {/* a distant vehicle passing, far below */}
+                    <span
+                        className="anim-car-light absolute bottom-[12%] left-0 h-[3px] w-8 rounded-full"
+                        style={{
+                            background:
+                                "linear-gradient(90deg, rgba(212,175,55,0) 0%, rgba(212,175,55,0.55) 100%)",
+                            filter: "blur(2px)",
+                            animationDelay: "11s",
+                            ...play("window"),
+                        }}
                     />
                     {[...Array(9)].map((_, i) => (
                         <span
@@ -209,25 +259,25 @@ export default function LittleWorld({ onVisit, onNext }) {
                         style={{
                             background:
                                 "linear-gradient(115deg, rgba(245,242,235,0.10) 0%, rgba(245,242,235,0) 55%)",
-                            animation: "moonbeam 12s ease-in-out infinite",
+                            animation: "moonbeam 19s ease-in-out infinite",
                             ...play("window"),
                         }}
                     />
                     {/* curtains */}
                     <div
-                        className="anim-sway absolute left-0 top-0 h-full w-[34%]"
+                        className="anim-sway-calm absolute left-0 top-0 h-full w-[34%]"
                         style={{
                             background: "linear-gradient(90deg, #151222 0%, #1c1830 60%, rgba(28,24,48,0.2) 100%)",
-                            animationDuration: "9s",
+                            animationDuration: "13s",
                             ...play("window"),
                         }}
                     />
                     <div
-                        className="anim-sway absolute right-0 top-0 h-full w-[34%]"
+                        className="anim-sway-calm absolute right-0 top-0 h-full w-[34%]"
                         style={{
                             background: "linear-gradient(270deg, #151222 0%, #1c1830 60%, rgba(28,24,48,0.2) 100%)",
-                            animationDuration: "10.5s",
-                            animationDelay: "1.2s",
+                            animationDuration: "17s",
+                            animationDelay: "2.3s",
                             ...play("window"),
                         }}
                     />
@@ -257,9 +307,20 @@ export default function LittleWorld({ onVisit, onNext }) {
                 data-testid="world-clock"
                 onClick={tapClock}
                 aria-label="clock"
+                style={par(3, 2)}
             >
                 {found.includes("clock") && <FoundMark className="-left-6 top-0" />}
                 <div className="relative h-24 w-24 rounded-full border-2 border-[#f5f2eb]/15 bg-[#0a0a0e]">
+                    {/* faint reflected ambience around the clock */}
+                    <span
+                        className="absolute -inset-6 rounded-full"
+                        style={{
+                            background:
+                                "radial-gradient(circle, rgba(212,175,55,0.10) 0%, rgba(212,175,55,0) 70%)",
+                            animation: "clockHalo 17s ease-in-out infinite",
+                            ...play("clock"),
+                        }}
+                    />
                     {[...Array(12)].map((_, i) => (
                         <span
                             key={i}
@@ -308,8 +369,20 @@ export default function LittleWorld({ onVisit, onNext }) {
                 </AnimatePresence>
             </button>
 
+            {/* lamp light washing the wall */}
+            <div
+                className="pointer-events-none absolute bottom-[16%] right-[4%] h-[48%] w-[42%]"
+                style={{
+                    ...par(4, 2),
+                    background:
+                        "radial-gradient(ellipse 60% 60% at 55% 75%, rgba(212,175,55,0.09) 0%, rgba(3,3,5,0) 70%)",
+                    animation: "lampWash 19s ease-in-out infinite",
+                    ...play("lamp"),
+                }}
+            />
+
             {/* desk + lamp */}
-            <div className="absolute bottom-0 right-[4%] h-[30%] w-[34%] min-w-[260px]">
+            <div className="absolute bottom-0 right-[4%] h-[30%] w-[34%] min-w-[260px]" style={par(7, 4)}>
                 <div className="absolute bottom-0 h-[26%] w-full bg-gradient-to-t from-[#0c0a08] to-[#12100c]" />
                 <div
                     className="anim-breathe absolute -top-16 left-[30%] h-64 w-64 rounded-full"
@@ -322,10 +395,10 @@ export default function LittleWorld({ onVisit, onNext }) {
                 />
                 {/* warm pool of light on the desk */}
                 <div
-                    className="anim-breathe absolute bottom-[16%] left-[14%] h-10 w-52 rounded-[50%]"
+                    className="absolute bottom-[16%] left-[14%] h-10 w-52 rounded-[50%]"
                     style={{
                         background: "radial-gradient(ellipse, rgba(212,175,55,0.15) 0%, rgba(212,175,55,0) 70%)",
-                        animationDuration: "5s",
+                        animation: "lampWash 23s ease-in-out infinite",
                         ...play("lamp"),
                     }}
                 />
@@ -385,11 +458,21 @@ export default function LittleWorld({ onVisit, onNext }) {
                     aria-label="phone"
                 >
                     {found.includes("phone") && <FoundMark className="-left-5 -top-3" />}
+                    {/* the light it casts on the desk when it wakes */}
+                    <span
+                        className="absolute -inset-4 rounded-full"
+                        style={{
+                            background:
+                                "radial-gradient(circle, rgba(140,160,200,0.25) 0%, rgba(140,160,200,0) 70%)",
+                            animation: phoneIdle || phoneLit ? "phoneCast 17s linear infinite" : "none",
+                            ...play("phone"),
+                        }}
+                    />
                     <span
                         className="absolute inset-1 rounded-md bg-[#1a2030]"
                         style={{
                             opacity: phoneIdle ? undefined : 0.95,
-                            animation: phoneIdle ? "screenGlow 11s linear infinite" : "none",
+                            animation: phoneIdle ? "screenGlow 17s linear infinite" : "none",
                             ...play("phone"),
                         }}
                     />
@@ -397,7 +480,7 @@ export default function LittleWorld({ onVisit, onNext }) {
                         className="absolute inset-2 flex flex-col items-center justify-center gap-1 rounded"
                         style={{
                             opacity: phoneIdle ? undefined : 1,
-                            animation: phoneIdle ? "reelGlow 11s linear infinite" : "none",
+                            animation: phoneIdle ? "reelGlow 17s linear infinite" : "none",
                             ...play("phone"),
                         }}
                     >
@@ -462,16 +545,18 @@ export default function LittleWorld({ onVisit, onNext }) {
             </div>
 
             {/* teddy */}
-            <div className="absolute bottom-[6%] left-[10%]" data-testid="world-teddy">
+            <div className="absolute bottom-[6%] left-[10%]" data-testid="world-teddy" style={par(10, 6)}>
                 <button onClick={hug} aria-label="teddy bear" className="relative block" data-testid="world-teddy-button">
                     {found.includes("teddy") && <FoundMark className="-right-6 -top-3" />}
-                    <svg viewBox="0 0 120 130" className={`anim-breathe-scale w-28 transition-transform duration-700 ${hugged ? "scale-95" : ""}`} style={play("teddy")}>
+                    <svg viewBox="0 0 120 130" className={`anim-teddy-idle w-28 transition-transform duration-700 ${hugged ? "scale-95" : ""}`} style={play("teddy")}>
                         <ellipse cx="60" cy="88" rx="30" ry="34" fill="#2e2620" />
                         <ellipse cx="60" cy="92" rx="17" ry="22" fill="#3a3028" />
                         <circle cx="40" cy="26" r="10" fill="#2e2620" />
-                        <circle cx="80" cy="26" r="10" fill="#2e2620" />
                         <circle cx="40" cy="26" r="5" fill="#3a3028" />
-                        <circle cx="80" cy="26" r="5" fill="#3a3028" />
+                        <g className="anim-ear" style={play("teddy")}>
+                            <circle cx="80" cy="26" r="10" fill="#2e2620" />
+                            <circle cx="80" cy="26" r="5" fill="#3a3028" />
+                        </g>
                         <circle cx="60" cy="44" r="24" fill="#2e2620" />
                         <ellipse cx="60" cy="52" rx="10" ry="7" fill="#3a3028" />
                         <circle cx="51" cy="40" r="2.4" fill="#0a0a0c" />
@@ -510,12 +595,12 @@ export default function LittleWorld({ onVisit, onNext }) {
             </div>
 
             {/* shelf with our little constellation */}
-            <div className="absolute left-[38%] top-[26%] hidden md:block">
+            <div className="absolute left-[38%] top-[26%] hidden md:block" style={par(5, 3)}>
                 <div className="h-[3px] w-36 bg-[#181410]" />
                 <svg
                     viewBox="0 0 90 34"
                     className="anim-sway absolute -top-7 left-3 w-20"
-                    style={{ animationDuration: "9s" }}
+                    style={{ animationDuration: "12s" }}
                     data-testid="world-constellation"
                 >
                     <path d="M10 24 Q45 6 80 20" fill="none" stroke="#d4af37" strokeWidth="1.1" strokeDasharray="3 4" opacity="0.65" />
@@ -614,6 +699,12 @@ export default function LittleWorld({ onVisit, onNext }) {
                     THE THINGS I SHOULD HAVE DONE BETTER →
                 </button>
             </motion.div>
+
+            {/* the room settling into night when she arrives */}
+            <div
+                className="anim-reveal-room pointer-events-none absolute inset-0 z-30 bg-[#030305]"
+                data-testid="world-settle-veil"
+            />
 
             {/* vignette */}
             <div
