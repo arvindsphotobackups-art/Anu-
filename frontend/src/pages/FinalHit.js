@@ -75,12 +75,28 @@ const ASSEMBLE = [
     { l: 40, t: 88, r: 0 },
 ];
 
-const Fragment = ({ s, i, assembled }) => {
-    const pos = assembled ? ASSEMBLE[i] : EDGE[i];
+const MOBILE_ASSEMBLE = [
+    { l: 3, t: 2, r: -2 },
+    { l: 32, t: 8, r: -1 },
+    { l: 52, t: 2, r: 2 },
+    { l: 3, t: 22, r: -1 },
+    { l: 3, t: 37, r: 2 },
+    { l: 52, t: 22, r: -1 },
+    { l: 3, t: 43, r: 2 },
+    { l: 52, t: 50, r: -2 },
+    { l: 52, t: 41, r: 1 },
+    { l: 3, t: 47, r: -1 },
+    { l: 3, t: 57, r: -2 },
+    { l: 3, t: 53, r: 2 },
+    { l: 52, t: 54, r: 0 },
+];
+
+const Fragment = ({ s, i, assembled, isMobile }) => {
+    const pos = assembled ? (isMobile ? MOBILE_ASSEMBLE[i] : ASSEMBLE[i]) : EDGE[i];
     return (
         <motion.div
             data-testid={`final-fragment-${i}`}
-            className="absolute z-[5] max-w-[132px] md:max-w-[210px]"
+            className="absolute z-[5] max-w-[46vw] md:max-w-[210px]"
             initial={{ opacity: 0, left: `${EDGE[i].l}%`, top: `${EDGE[i].t}%`, rotate: EDGE[i].r }}
             animate={{ opacity: assembled ? 0.92 : 0.6, left: `${pos.l}%`, top: `${pos.t}%`, rotate: pos.r }}
             transition={{
@@ -123,6 +139,7 @@ export default function FinalHit() {
     const [codaOpen, setCodaOpen] = useState(false);
     const [codaIdx, setCodaIdx] = useState(0);
     const [ended, setEnded] = useState(false);
+    const [isMobile] = useState(() => typeof window !== "undefined" && window.innerWidth < 640);
 
     const stars = useMemo(
         () =>
@@ -163,7 +180,9 @@ export default function FinalHit() {
         <div
             data-testid="final-page"
             onClick={advance}
-            className="relative flex min-h-screen w-full cursor-pointer items-center justify-center overflow-hidden bg-[#030305] px-6"
+            className={`relative min-h-screen w-full cursor-pointer overflow-x-hidden bg-[#030305] px-6 ${
+                assembled ? "overflow-y-auto" : "flex items-center justify-center overflow-hidden"
+            }`}
         >
             {/* stars appear near the end */}
             <div
@@ -186,9 +205,12 @@ export default function FinalHit() {
                 ))}
             </div>
 
+            {/* tall canvas so the composition breathes on phones */}
+            {assembled && isMobile && <div className="h-[170vh]" aria-hidden="true" />}
+
             {/* accumulated fragments of the story, hanging around the edges */}
             {done.map((s, i) => (
-                <Fragment key={i} s={s} i={i} assembled={assembled} />
+                <Fragment key={i} s={s} i={i} assembled={assembled} isMobile={isMobile} />
             ))}
 
             {/* current message, one at a time */}
@@ -246,10 +268,10 @@ export default function FinalHit() {
             {/* the final assembly: everything returns to form one page */}
             {assembled && (!codaOpen || ended) && (
                 <motion.div
-                    initial={{ opacity: 0, y: 18 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, y: 18, x: "-50%" }}
+                    animate={{ opacity: 1, y: 0, x: "-50%" }}
                     transition={{ duration: 2.4, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                    className="absolute left-1/2 top-[20%] z-10 w-full max-w-2xl -translate-x-1/2 px-6 text-center"
+                    className="absolute left-1/2 top-[5%] z-10 w-full max-w-2xl px-6 text-center md:top-[20%]"
                     data-testid="final-assembly"
                 >
                     <p className="f-serif text-4xl font-light text-[#fdfbf7] sm:text-5xl">
@@ -284,7 +306,7 @@ export default function FinalHit() {
                         e.stopPropagation();
                         setCodaOpen(true);
                     }}
-                    className="f-hand absolute bottom-[7%] left-1/2 z-20 -translate-x-1/2 text-xl text-[#a1a1a6] underline decoration-[#d4af37]/25 underline-offset-8 transition-colors duration-500 hover:text-[#f5ecd7]"
+                    className="f-hand absolute bottom-[7%] left-1/2 z-20 -translate-x-1/2 text-xl text-[#a1a1a6] underline decoration-[#d4af37]/25 underline-offset-8 transition-colors duration-500 hover:text-[#f5ecd7] max-md:bottom-auto max-md:top-[66%]"
                 >
                     one last thing…
                 </motion.button>
@@ -295,11 +317,11 @@ export default function FinalHit() {
                 {codaOpen && !ended && (
                     <motion.p
                         key={`coda-${codaIdx}`}
-                        initial={{ opacity: 0, y: 14 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
+                        initial={{ opacity: 0, x: "-50%", y: "-40%" }}
+                        animate={{ opacity: 1, x: "-50%", y: "-50%" }}
+                        exit={{ opacity: 0, x: "-50%", y: "-60%" }}
                         transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
-                        className="f-serif absolute left-1/2 top-1/2 z-30 w-full max-w-xl -translate-x-1/2 -translate-y-1/2 rounded-sm bg-[#030305]/70 px-6 py-10 text-center text-2xl font-light italic leading-relaxed text-[#fdfbf7] backdrop-blur-[2px] sm:text-3xl"
+                        className="f-serif fixed left-1/2 top-1/2 z-30 w-full max-w-xl rounded-sm bg-[#030305]/70 px-6 py-10 text-center text-2xl font-light italic leading-relaxed text-[#fdfbf7] backdrop-blur-[2px] sm:text-3xl"
                         data-testid={`final-coda-${codaIdx}`}
                     >
                         {CODA[codaIdx]}
@@ -312,7 +334,7 @@ export default function FinalHit() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 3 }}
-                    className="f-ui absolute bottom-[7%] left-1/2 z-30 -translate-x-1/2 text-[10px] uppercase tracking-[0.5em] text-[#a1a1a6]/60"
+                    className="f-ui fixed bottom-[7%] left-1/2 z-30 -translate-x-1/2 text-[10px] uppercase tracking-[0.5em] text-[#a1a1a6]/60"
                     data-testid="final-end"
                 >
                     — end —

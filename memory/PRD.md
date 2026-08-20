@@ -15,6 +15,10 @@ Build a FRONTEND-ONLY interactive romantic story website (personal gift). No bac
 - The gift recipient (her): explores chapters sequentially, discovers hidden interactions.
 - The creator (him): edits texts in `src/data/*` and swaps placeholder images.
 
+## Implemented (2026-08-21, iteration 6 — constellation finale + mobile assembly polish)
+- Page 3: when all five objects are discovered, their golden sparkles connect into a hand-drawn dotted constellation that draws itself across the room before the closing lines.
+- Final chapter on phones: the composition becomes a tall scrollable "final page" — centered headline, photo beneath, all fragments in two readable columns with mobile-specific positions; coda and END float fixed over the viewport regardless of scroll. Fixed framer/tailwind transform conflicts that clipped centered text, widened fragments, and removed right-edge clipping.
+
 ## Implemented (2026-08-21, iteration 5 — living Page 3 + star rotation + responsiveness)
 - Hidden stars: landing now has 5 with personal witty notes (incl. "plot twist: the annoying girl became my favourite person."), memories refreshed with 3 relationship-specific notes; messages auto-align so they never clip offscreen.
 - Page 3 rebuilt behaviorally (layout untouched): all five objects are discoverable memories — teddy hug → "I miss your childish little moments…", phone → staged mini chat sequence then "One reel. One reply. Then somehow two hours disappeared.", clock → real ticking second hand, hands spin then settle at ~1am + "those nights when we somehow always had one more thing to talk about.", window → "We could turn an ordinary evening into a whole little world.", lamp → "You made even doing nothing feel like something."

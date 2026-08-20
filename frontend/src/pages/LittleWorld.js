@@ -461,6 +461,29 @@ export default function LittleWorld({ onVisit, onNext }) {
                 </svg>
             </div>
 
+            {/* the discovered sparkles connect into our constellation */}
+            {found.length === OBJECTS.length && (
+                <svg
+                    className="pointer-events-none absolute inset-0 z-10 h-full w-full"
+                    viewBox="0 0 100 100"
+                    preserveAspectRatio="none"
+                    data-testid="world-constellation-finale"
+                >
+                    <motion.path
+                        d="M17 74 L33 11 L81 10 L89 78 L73 72 Z"
+                        fill="none"
+                        stroke="#d4af37"
+                        strokeWidth="1"
+                        strokeDasharray="2.5 3"
+                        opacity="0.5"
+                        vectorEffect="non-scaling-stroke"
+                        initial={{ pathLength: 0 }}
+                        animate={{ pathLength: 1 }}
+                        transition={{ duration: 4, delay: 0.8, ease: "easeInOut" }}
+                    />
+                </svg>
+            )}
+
             {/* floor */}
             <div className="absolute bottom-0 h-[10%] w-full bg-gradient-to-b from-[#0a0908] to-[#060505]" />
 
