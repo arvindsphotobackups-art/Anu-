@@ -109,7 +109,7 @@ const Fragment = ({ s, i, assembled, isMobile }) => {
                 {s.photo ? (
                     <div className="border border-[#f5f2eb]/15 bg-[#0a0a0c] p-1">
                         <img
-                            src="/images/final/photo.svg"
+                            src="/images/final/final_photo.jpeg"
                             alt="us"
                             className={`transition-all duration-[2500ms] ${assembled ? "w-32 md:w-44" : "w-14 md:w-20"}`}
                         />
