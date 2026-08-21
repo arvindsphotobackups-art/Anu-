@@ -234,7 +234,7 @@ export default function FinalHit() {
                                 data-testid="final-photo"
                             >
                                 <img
-                                    src="/images/final/photo.svg"
+                                    src="/images/final/final_photo.jpeg"
                                     alt="us"
                                     className="w-full object-cover"
                                     style={{ filter: "brightness(0.9)" }}
