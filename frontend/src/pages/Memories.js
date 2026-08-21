@@ -103,7 +103,7 @@ export default function Memories({ discovered, onDiscover, onNext }) {
             </header>
 
             <div className="relative z-10 mx-auto flex max-w-6xl flex-col items-center gap-16 px-6 pb-48 pt-20 md:block md:h-[1500px]">
-                {/* 1 — First Talk : flip */}
+                {/* 1 — First Photo : flip */}
                 <Frame rot={-4} className="md:left-[4%] md:top-[2%]" testid="memory-first-talk">
                     {has("first-talk") && <DoneMark />}
                     <motion.div
@@ -120,7 +120,7 @@ export default function Memories({ discovered, onDiscover, onNext }) {
                             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
                         >
                             <div className="absolute inset-0 [backface-visibility:hidden]">
-                                <img src="/images/memories/memory-1.svg" alt="first talk" className="h-full w-full object-cover" />
+                                <img src="/images/memories/first_photo_together.jpeg" alt="first photo" className="h-full w-full object-cover" />
                             </div>
                             <div className="absolute inset-0 flex flex-col justify-center gap-2 bg-[#efe9dc] p-4 [backface-visibility:hidden] [transform:rotateY(180deg)]">
                                 <p className="f-hand text-lg leading-snug text-[#1a1a1a]">
@@ -134,7 +134,7 @@ export default function Memories({ discovered, onDiscover, onNext }) {
                             </div>
                         </motion.div>
                     </motion.div>
-                    <Caption>first talk</Caption>
+                    <Caption>first photo</Caption>
                 </Frame>
 
                 {/* 2 — First Outing : pull the note */}
@@ -155,7 +155,7 @@ export default function Memories({ discovered, onDiscover, onNext }) {
                         }}
                         data-testid="memory-first-outing-card"
                     >
-                        <img src="/images/memories/memory-2.svg" alt="first outing" className="h-[210px] w-full object-cover" />
+                        <img src="/images/memories/first_outing.jpeg" alt="first outing" className="h-[210px] w-full object-cover" />
                         {!pulled && (
                             <span className="f-hand absolute -right-3 top-1/2 rotate-90 bg-[#c76d63] px-3 py-1 text-sm text-[#fdfbf7]">
                                 pull
@@ -176,7 +176,7 @@ export default function Memories({ discovered, onDiscover, onNext }) {
                         }}
                         data-testid="memory-first-memory-card"
                     >
-                        <img src="/images/memories/memory-3.svg" alt="first memory together" className="h-full w-full object-cover" />
+                        <img src="/images/memories/first_fight.jpeg" alt="first memory together" className="h-full w-full object-cover" />
                         <AnimatePresence>
                             {peeled && (
                                 <motion.div
@@ -208,7 +208,7 @@ export default function Memories({ discovered, onDiscover, onNext }) {
                 {/* 4 — That Stupid Fight : crumpled note */}
                 <Frame rot={-3} className="md:right-[6%] md:top-[48%]" testid="memory-stupid-fight">
                     {has("stupid-fight") && <DoneMark />}
-                    <img src="/images/memories/memory-4.svg" alt="that stupid fight" className="h-[210px] w-full object-cover" />
+                    <img src="/images/memories/first_memory_together.jpeg" alt="that stupid fight" className="h-[210px] w-full object-cover" />
                     <Caption>that stupid fight 😂</Caption>
                     <div className="absolute -bottom-8 -left-6 z-20">
                         {!unfolded ? (
@@ -250,7 +250,7 @@ export default function Memories({ discovered, onDiscover, onNext }) {
                         data-testid="memory-best-day-card"
                     >
                         <img
-                            src="/images/memories/memory-5.svg"
+                            src="/images/memories/best_day_ever.jpeg"
                             alt="best day ever"
                             className="h-[210px] w-full object-cover transition-all duration-[2600ms] ease-out"
                             style={{
